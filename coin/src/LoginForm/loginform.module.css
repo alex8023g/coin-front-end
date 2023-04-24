@@ -1,0 +1,13 @@
+.loginForm {
+  margin: 0 auto;
+  padding-top: 50px;
+  width: 500px;
+  height: 366px;
+  background-color: #f3f4f6;
+  border-radius: 56px;
+}
+
+.h2 {
+  text-align: center;
+  margin-bottom: 35px;
+}

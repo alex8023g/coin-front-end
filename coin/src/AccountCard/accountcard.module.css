@@ -1,0 +1,12 @@
+.accountNumber {
+  margin-bottom: 9px;
+}
+
+.accountBalance {
+  margin-bottom: 9px;
+}
+
+.bottomWrap {
+  display: flex;
+  justify-content: space-between;
+}

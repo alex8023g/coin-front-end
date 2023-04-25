@@ -1,9 +1,12 @@
-import React, { ChangeEvent, useState } from 'react';
-import styles from './loginform.module.css';
+import React, { ChangeEvent, SetStateAction, useState } from 'react';
+import styles from './loginpage.module.css';
+import { Navigate } from 'react-router-dom';
 
-export function LoginForm() {
+export function LoginPage() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  // const [tokenSt, setTokenSt] = useState('');
+  const token = sessionStorage.getItem('auth');
 
   function handleLogin(e: ChangeEvent<HTMLInputElement>) {
     setLogin(e.target.value);
@@ -16,7 +19,7 @@ export function LoginForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     console.log('submit', process.env.REACT_APP_API_SERVER);
-    if (!process.env.REACT_APP_API_SERVER) return;
+    // if (!process.env.REACT_APP_API_SERVER) return;
     fetch(process.env.REACT_APP_API_SERVER + '/login', {
       method: 'POST',
       headers: {
@@ -32,15 +35,18 @@ export function LoginForm() {
           payload: { token },
         } = res;
         console.log(token);
-        if (token) {
-          sessionStorage.setItem('auth', token);
-          // router.push('/');
-        }
+        // setIsUser(true);
+        // if (token) {
+        sessionStorage.setItem('auth', token);
+        window.location.replace('/');
+        // router.push('/');
+        // }
       });
   }
 
   return (
     <>
+      {token && <Navigate to="/" />}
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <h2 className={styles.h2}>Вход в аккаунт</h2>
         <div>

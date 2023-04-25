@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Header } from './Header';
 import { Layout } from './Layout';
-import { LoginForm } from './LoginForm';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { LoginPage } from './LoginPage';
+import { HomePage } from './HomePage';
 
 function App() {
+  const [isUser, setIsUser] = useState(false);
+
   return (
-    <Layout>
-      <Header />
-      <LoginForm />
-    </Layout>
+    <BrowserRouter>
+      <Layout>
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="login" element={<LoginPage />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   );
 }
 

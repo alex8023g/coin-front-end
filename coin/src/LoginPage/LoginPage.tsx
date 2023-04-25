@@ -30,7 +30,10 @@ export function LoginPage() {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        if (res.error) return;
+        if (res.error) {
+          console.log(res.error);
+          return;
+        }
         const {
           payload: { token },
         } = res;

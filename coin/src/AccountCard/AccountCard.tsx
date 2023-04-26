@@ -13,8 +13,6 @@ export function AccountCard({ account }: { account: IAccount }) {
     <Paper
       sx={{
         width: 380,
-        // height: 150,
-
         mb: 7,
         p: 2.2,
         borderRadius: 3,
@@ -24,11 +22,13 @@ export function AccountCard({ account }: { account: IAccount }) {
       <div className={styles.accountNumber}>{account.account}</div>
       <div className={styles.accountBalance}>{account.balance + ' ₽'}</div>
       <div className={styles.bottomWrap}>
-        <div>
+        <div className={styles.lastTrans}>
           <div>Последняя транзакция</div>
           <div>{LastTransDate}</div>
         </div>
-        <Button variant="contained">Открыть</Button>
+        <Button variant="contained" sx={{ height: 52, borderRadius: 2 }}>
+          Открыть
+        </Button>
       </div>
     </Paper>
   );

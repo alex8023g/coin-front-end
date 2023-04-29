@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styles from './currencypage.module.css';
-import { Box, Paper, dividerClasses } from '@mui/material';
+import {
+  Box,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  dividerClasses,
+} from '@mui/material';
 import { produce } from 'immer';
 import { ReactComponent as ArrowUp } from '../assets/arrowup.svg';
 import { ReactComponent as ArrowDown } from '../assets/arrowdown.svg';
@@ -81,7 +90,7 @@ export function CurrencyPage() {
 
   return (
     <>
-      <h2>CurrencyPage</h2>
+      <h1>Валютный обмен</h1>
       <Box
         sx={{
           display: 'flex',
@@ -90,33 +99,77 @@ export function CurrencyPage() {
           gap: 3,
         }}
       >
-        <Paper elevation={7} sx={{ width: 588 }}>
-          <ul>
-            {currencies.map((currency) => (
-              <li>
-                {currency.code} ... {currency.amount}
-              </li>
-            ))}
-          </ul>
-        </Paper>
-        <Paper elevation={7} sx={{ width: 703 }}>
+        <Box>
+          <Paper
+            elevation={7}
+            sx={{ width: 540, marginBottom: 4, padding: 5, borderRadius: 9 }}
+          >
+            <h2>Ваши валюты</h2>
+            <ul>
+              {currencies.map((currency) => (
+                <li>
+                  {currency.code}
+                  <span className={styles.spanDotsBlack}></span>
+                  {currency.amount}
+                </li>
+              ))}
+            </ul>
+          </Paper>
+          <Paper elevation={7} sx={{ width: 540, padding: 5, borderRadius: 9 }}>
+            <h2>Обмен валюты</h2>
+            <Box>
+              Из
+              <FormControl sx={{ width: 134 }}>
+                {/* <InputLabel id="select-label">Сортировка</InputLabel> */}
+                <Select
+                  labelId="select-label"
+                  defaultValue={'byNumber'}
+                  // id="select-label"
+                  // value={sortType}
+                  // label="Сортировка"
+                  // onChange={(e) => setSortType(e.target.value)}
+                >
+                  <MenuItem value={'byNumber'} selected={true}>
+                    По номеру
+                  </MenuItem>
+                  <MenuItem value={'byBalance'}>По балансу</MenuItem>
+                  <MenuItem value={'byLastTransDate'}>
+                    По последней транзакции
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Paper>
+        </Box>
+        <Paper
+          elevation={7}
+          sx={{
+            width: 703,
+            padding: 5,
+            borderRadius: 9,
+            backgroundColor: '#E5E5E5',
+          }}
+        >
+          <h2>Изменение курсов в реальном времени</h2>
           <ul>
             {currencyFeed?.map((curFeed) =>
               curFeed.change > 0 ? (
-                <li
-                  style={{
-                    display: 'flex',
-                  }}
-                >
+                <li>
                   {curFeed.from}/{curFeed.to}
-                  <span style={{ flexGrow: 1 }}>fff</span>
+                  <span className={styles.spanDotsGreen}></span>
                   {curFeed.rate}
-                  <ArrowUp />
+                  <div className={styles.arrowDiv}>
+                    <ArrowUp />
+                  </div>
                 </li>
               ) : (
-                <li>
-                  {curFeed.from}/{curFeed.to}........{curFeed.rate}
-                  <ArrowDown />
+                <li className={styles.liCurFlow}>
+                  {curFeed.from}/{curFeed.to}
+                  <span className={styles.spanDotsRed}></span>
+                  {curFeed.rate}
+                  <div className={styles.arrowDiv}>
+                    <ArrowDown />
+                  </div>
                 </li>
               )
             )}

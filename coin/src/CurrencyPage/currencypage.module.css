@@ -1,0 +1,27 @@
+.spanDotsGreen {
+  flex-grow: 1;
+  border-bottom: 1px dashed #76ca66;
+}
+
+.spanDotsRed {
+  flex-grow: 1;
+  border-bottom: 1px dashed #fd4e5d;
+}
+
+.spanDotsBlack {
+  flex-grow: 1;
+  border-bottom: 1px dashed #000;
+}
+
+.arrowDiv {
+  padding-left: 16px;
+}
+
+h2 {
+  margin-bottom: 25px;
+}
+
+li {
+  display: flex;
+  margin-bottom: 25px;
+}

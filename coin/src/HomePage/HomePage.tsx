@@ -71,37 +71,40 @@ export function HomePage() {
   return (
     <>
       {!token && <Navigate to="login" />}
-      <div className={styles.firstLine}>
-        <h1 className={styles.title}>Ваши счета</h1>
-        <FormControl sx={{ width: 300 }}>
-          <InputLabel id="select-label">Сортировка</InputLabel>
-          <Select
-            labelId="select-label"
-            // id="select-label"
-            value={sortType}
-            label="Сортировка"
-            onChange={(e) => setSortType(e.target.value)}
+      {token && (
+        <div className={styles.firstLine}>
+          <h1 className={styles.title}>Ваши счета</h1>
+          <FormControl sx={{ width: 300 }}>
+            <InputLabel id="select-label">Сортировка</InputLabel>
+            <Select
+              labelId="select-label"
+              // id="select-label"
+              value={sortType}
+              label="Сортировка"
+              onChange={(e) => setSortType(e.target.value)}
+            >
+              <MenuItem value={'byNumber'}>По номеру</MenuItem>
+              <MenuItem value={'byBalance'}>По балансу</MenuItem>
+              <MenuItem value={'byLastTransDate'}>
+                По последней транзакции
+              </MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            onClick={createAccount}
+            sx={{ p: '14px 24px 14px 18px', float: 'right', borderRadius: 2 }}
           >
-            <MenuItem value={'byNumber'}>По номеру</MenuItem>
-            <MenuItem value={'byBalance'}>По балансу</MenuItem>
-            <MenuItem value={'byLastTransDate'}>
-              По последней транзакции
-            </MenuItem>
-          </Select>
-        </FormControl>
-        <Button
-          variant="contained"
-          onClick={createAccount}
-          sx={{ p: '14px 24px 14px 18px', float: 'right', borderRadius: 2 }}
-        >
-          <AddIcon sx={{ mr: 1 }} /> cоздать новый счет
-        </Button>
-      </div>
+            <AddIcon sx={{ mr: 1 }} /> cоздать новый счет
+          </Button>
+        </div>
+      )}
       <Box
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'space-between',
+          justifyContent: 'space-around',
+          gap: 3,
         }}
       >
         {accounts &&

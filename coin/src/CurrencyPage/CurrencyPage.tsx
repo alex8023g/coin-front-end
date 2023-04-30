@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styles from './currencypage.module.css';
 import {
   Box,
+  Button,
   Divider,
   FormControl,
   InputLabel,
   MenuItem,
   Paper,
   Select,
+  Stack,
+  TextField,
   dividerClasses,
 } from '@mui/material';
 import { produce } from 'immer';
@@ -29,10 +32,9 @@ export function CurrencyPage() {
   const token = sessionStorage.getItem('auth');
   const [currencies, setCurrencies] = useState<ICurrency[]>([]);
   const [currencyFeed, setCurrencyFeed] = useState<ICurrencyFeed[]>([]);
+  const [sum, setSum] = useState('0');
 
   useEffect(() => {
-    // if (!process.env.REACT_APP_API_WS) return;
-    console.log('socket', process.env.REACT_APP_API_WS);
     let socket = new WebSocket(process.env.REACT_APP_API_WS + '/currency-feed');
     socket.onmessage = function (e) {
       const data = JSON.parse(e.data);
@@ -47,7 +49,7 @@ export function CurrencyPage() {
           } else {
             draft.push(data);
           }
-          if (draft.length > 15) {
+          if (draft.length > 22) {
             draft.shift();
           }
         })
@@ -84,7 +86,7 @@ export function CurrencyPage() {
         const { payload } = res;
         const currArr: ICurrency[] = Object.values(payload);
         setCurrencies(currArr);
-        console.log(payload, currencies);
+        console.log(currArr, currencies);
       });
   }, [token]);
 
@@ -102,7 +104,7 @@ export function CurrencyPage() {
         <Box>
           <Paper
             elevation={7}
-            sx={{ width: 540, marginBottom: 4, padding: 5, borderRadius: 9 }}
+            sx={{ marginBottom: 4, padding: 5, borderRadius: 9 }}
           >
             <h2>Ваши валюты</h2>
             <ul>
@@ -117,29 +119,65 @@ export function CurrencyPage() {
           </Paper>
           <Paper elevation={7} sx={{ width: 540, padding: 5, borderRadius: 9 }}>
             <h2>Обмен валюты</h2>
-            <Box>
-              Из
-              <FormControl sx={{ width: 134 }}>
-                {/* <InputLabel id="select-label">Сортировка</InputLabel> */}
-                <Select
-                  labelId="select-label"
-                  defaultValue={'byNumber'}
-                  // id="select-label"
-                  // value={sortType}
-                  // label="Сортировка"
-                  // onChange={(e) => setSortType(e.target.value)}
-                >
-                  <MenuItem value={'byNumber'} selected={true}>
-                    По номеру
-                  </MenuItem>
-                  <MenuItem value={'byBalance'}>По балансу</MenuItem>
-                  <MenuItem value={'byLastTransDate'}>
-                    По последней транзакции
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-          </Paper>
+
+            {currencies[0] && (
+              <div className={styles.currChangeContainer}>
+                <div className={styles.currChangeFormContainer}>
+                  <div className={styles.currChangeFromTo}>
+                    <span className={styles.spanCurrChange}> Из </span>
+                    <FormControl sx={{ mr: 2, flexGrow: 1 }}>
+                      {/* <InputLabel id="select-label">Сортировка</InputLabel> */}
+
+                      <Select
+                        labelId="select-label"
+                        defaultValue={currencies[0].code}
+                        // id="select-label"
+                        // value={sortType}
+                        // label="Сортировка"
+                        // onChange={(e) => setSortType(e.target.value)}
+                      >
+                        {currencies.map((curr) => (
+                          <MenuItem value={curr.code}>{curr.code}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <span className={styles.spanCurrChange}> в </span>
+                    <FormControl sx={{ flexGrow: 1 }}>
+                      {/* <InputLabel id="select-label">Сортировка</InputLabel> */}
+
+                      <Select
+                        labelId="select-label"
+                        defaultValue={currencies[1].code}
+                        // id="select-label"
+                        // value={sortType}
+                        // label="Сортировка"
+                        // onChange={(e) => setSortType(e.target.value)}
+                      >
+                        {currencies.map((curr) => (
+                          <MenuItem value={curr.code}>{curr.code}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div className={styles.currChangeSum}>
+                    <span className={styles.spanCurrChange}> Сумма </span>
+                    <TextField
+                      id="outlined-controlled"
+                      // label="Controlled"
+                      sx={{ flexGrow: 1 }}
+                      value={sum}
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        setSum(event.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+                <Button variant="contained">Обменять</Button>
+              </div>
+            )}
+          </Paper>{' '}
         </Box>
         <Paper
           elevation={7}

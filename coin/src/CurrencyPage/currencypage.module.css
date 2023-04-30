@@ -25,3 +25,33 @@ li {
   display: flex;
   margin-bottom: 25px;
 }
+
+.currChangeContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.currChangeFormContainer {
+  flex-grow: 1;
+  /* outline: 1px solid coral; */
+}
+
+.currChangeFromTo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  /* flex-grow: 1; */
+  /* outline: 1px solid coral; */
+}
+
+.currChangeSum {
+  display: flex;
+  align-items: center;
+  /* flex-grow: 1; */
+  /* outline: 1px solid coral; */
+}
+
+.spanCurrChange {
+  margin-right: 20px;
+}

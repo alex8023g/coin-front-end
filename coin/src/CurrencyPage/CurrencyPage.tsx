@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './currencypage.module.css';
 import {
   Box,
@@ -16,6 +16,7 @@ import {
 import { produce } from 'immer';
 import { ReactComponent as ArrowUp } from '../assets/arrowup.svg';
 import { ReactComponent as ArrowDown } from '../assets/arrowdown.svg';
+import { nanoid } from 'nanoid';
 
 interface ICurrency {
   amount: number;
@@ -28,11 +29,23 @@ interface ICurrencyFeed {
   rate: number;
   change: number;
 }
+
+interface IExchange {
+  from: string;
+  to: string;
+  amount: string;
+}
 export function CurrencyPage() {
   const token = sessionStorage.getItem('auth');
   const [currencies, setCurrencies] = useState<ICurrency[]>([]);
   const [currencyFeed, setCurrencyFeed] = useState<ICurrencyFeed[]>([]);
-  const [sum, setSum] = useState('0');
+  // const [sum, setSum] = useState('0');
+  const [exchange, setExchange] = useState<IExchange>({
+    from: '',
+    to: '',
+    amount: '',
+  });
+  const updateCurrencies = useRef(0);
 
   useEffect(() => {
     let socket = new WebSocket(process.env.REACT_APP_API_WS + '/currency-feed');
@@ -86,9 +99,27 @@ export function CurrencyPage() {
         const { payload } = res;
         const currArr: ICurrency[] = Object.values(payload);
         setCurrencies(currArr);
+        setExchange({ from: currArr[0].code, to: currArr[1].code, amount: '' });
         console.log(currArr, currencies);
       });
-  }, [token]);
+  }, [token, updateCurrencies.current]);
+
+  function handleExchange() {
+    console.log(exchange);
+    fetch(process.env.REACT_APP_API_SERVER + '/currency-buy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Basic ${token}`,
+      },
+      body: JSON.stringify(exchange),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        updateCurrencies.current++;
+      });
+  }
 
   return (
     <>
@@ -109,7 +140,7 @@ export function CurrencyPage() {
             <h2>Ваши валюты</h2>
             <ul>
               {currencies.map((currency) => (
-                <li>
+                <li key={nanoid()}>
                   {currency.code}
                   <span className={styles.spanDotsBlack}></span>
                   {currency.amount}
@@ -117,7 +148,10 @@ export function CurrencyPage() {
               ))}
             </ul>
           </Paper>
-          <Paper elevation={7} sx={{ width: 540, padding: 5, borderRadius: 9 }}>
+          <Paper
+            elevation={7}
+            sx={{ marginBottom: 4, width: 540, padding: 5, borderRadius: 9 }}
+          >
             <h2>Обмен валюты</h2>
 
             {currencies[0] && (
@@ -134,10 +168,18 @@ export function CurrencyPage() {
                         // id="select-label"
                         // value={sortType}
                         // label="Сортировка"
-                        // onChange={(e) => setSortType(e.target.value)}
+                        onChange={(e) =>
+                          setExchange(
+                            produce((draft) => {
+                              draft.from = e.target.value;
+                            })
+                          )
+                        }
                       >
                         {currencies.map((curr) => (
-                          <MenuItem value={curr.code}>{curr.code}</MenuItem>
+                          <MenuItem value={curr.code} key={nanoid()}>
+                            {curr.code}
+                          </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
@@ -151,10 +193,18 @@ export function CurrencyPage() {
                         // id="select-label"
                         // value={sortType}
                         // label="Сортировка"
-                        // onChange={(e) => setSortType(e.target.value)}
+                        onChange={(e) =>
+                          setExchange(
+                            produce((draft) => {
+                              draft.to = e.target.value;
+                            })
+                          )
+                        }
                       >
                         {currencies.map((curr) => (
-                          <MenuItem value={curr.code}>{curr.code}</MenuItem>
+                          <MenuItem value={curr.code} key={nanoid()}>
+                            {curr.code}
+                          </MenuItem>
                         ))}
                       </Select>
                     </FormControl>
@@ -165,19 +215,25 @@ export function CurrencyPage() {
                       id="outlined-controlled"
                       // label="Controlled"
                       sx={{ flexGrow: 1 }}
-                      value={sum}
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        setSum(event.target.value);
+                      value={exchange.amount}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        // if (!/[\d?\.?]/.test(e.target.value.slice(-1))) return;
+                        // setSum(e.target.value);
+                        setExchange(
+                          produce((draft) => {
+                            draft.amount = e.target.value;
+                          })
+                        );
                       }}
                     />
                   </div>
                 </div>
-                <Button variant="contained">Обменять</Button>
+                <Button variant="contained" onClick={handleExchange}>
+                  Обменять
+                </Button>
               </div>
             )}
-          </Paper>{' '}
+          </Paper>
         </Box>
         <Paper
           elevation={7}
@@ -192,7 +248,7 @@ export function CurrencyPage() {
           <ul>
             {currencyFeed?.map((curFeed) =>
               curFeed.change > 0 ? (
-                <li>
+                <li key={nanoid()}>
                   {curFeed.from}/{curFeed.to}
                   <span className={styles.spanDotsGreen}></span>
                   {curFeed.rate}
@@ -201,7 +257,7 @@ export function CurrencyPage() {
                   </div>
                 </li>
               ) : (
-                <li className={styles.liCurFlow}>
+                <li key={nanoid()} className={styles.liCurFlow}>
                   {curFeed.from}/{curFeed.to}
                   <span className={styles.spanDotsRed}></span>
                   {curFeed.rate}

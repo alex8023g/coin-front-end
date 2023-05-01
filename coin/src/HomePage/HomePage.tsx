@@ -21,7 +21,7 @@ export interface IAccount {
   transactions: ITransaction[];
 }
 
-interface ITransaction {
+export interface ITransaction {
   amount: number;
   date: string;
   from: string;
@@ -108,8 +108,8 @@ export function HomePage() {
         }}
       >
         {accounts &&
-          accounts.map((account) => {
-            return <AccountCard account={account} />;
+          accounts.map((accountData) => {
+            return <AccountCard accountData={accountData} />;
           })}
       </Box>
     </>

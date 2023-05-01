@@ -1,0 +1,27 @@
+h1 {
+  margin: 0;
+}
+.firstLineContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.secondLineContainer {
+  display: flex;
+  /* justify-content: space-between; */
+  gap: 50px;
+}
+
+.spanBalance {
+  /* color: red; */
+}
+
+.newRemittanceCont {
+  display: flex;
+  justify-content: start;
+}
+
+.textFieldCont {
+  flex-basis: 100px;
+}

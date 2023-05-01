@@ -9,7 +9,14 @@ export function Header() {
       <div className={styles.container}>
         <span className={styles.title}>Coin.</span>
         <div>
-          <button className={styles.navBtn}>Банкоматы</button>
+          <button
+            className={styles.navBtn}
+            onClick={() => {
+              window.location.replace('/atm');
+            }}
+          >
+            Банкоматы
+          </button>
           <button
             className={styles.navBtn}
             onClick={() => {
@@ -26,7 +33,15 @@ export function Header() {
           >
             Валюта
           </button>
-          <button className={styles.navBtn}>Выйти</button>
+          <button
+            className={styles.navBtn}
+            onClick={() => {
+              sessionStorage.removeItem('auth');
+              window.location.replace('/login');
+            }}
+          >
+            Выйти
+          </button>
         </div>
       </div>
     </header>

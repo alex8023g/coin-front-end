@@ -17,6 +17,7 @@ import { produce } from 'immer';
 import { ReactComponent as ArrowUp } from '../assets/arrowup.svg';
 import { ReactComponent as ArrowDown } from '../assets/arrowdown.svg';
 import { nanoid } from 'nanoid';
+import { Navigate } from 'react-router-dom';
 
 interface ICurrency {
   amount: number;
@@ -123,6 +124,7 @@ export function CurrencyPage() {
 
   return (
     <>
+      {!token && <Navigate to="/login" />}
       <h1>Валютный обмен</h1>
       <Box
         sx={{

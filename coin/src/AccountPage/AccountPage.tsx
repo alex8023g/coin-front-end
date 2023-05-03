@@ -83,7 +83,7 @@ export function AccountPage() {
                 sx={{ width: 300 }}
               />
             </div>
-            <Button variant="contained" sx={{ padding: '14px 35px' }}>
+            <Button variant="contained" sx={{ padding: '14px 40px' }}>
               <MailOutlineIcon sx={{ marginRight: '7px' }} />
               отправить
             </Button>

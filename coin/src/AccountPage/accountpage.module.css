@@ -19,9 +19,11 @@ h1 {
 
 .newRemittanceCont {
   display: flex;
+  max-width: 470px;
   justify-content: start;
 }
 
 .textFieldCont {
-  flex-basis: 100px;
+  /* flex-basis: 100px; */
+  margin-right: 25px;
 }

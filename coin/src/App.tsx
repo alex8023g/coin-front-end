@@ -9,6 +9,7 @@ import { HomePage } from './HomePage';
 import { CurrencyPage } from './CurrencyPage';
 import { AtmPage } from './AtmPage';
 import { AccountPage } from './AccountPage';
+import { BalancePage } from './BalancePage';
 
 function App() {
   const [isUser, setIsUser] = useState(false);
@@ -23,6 +24,7 @@ function App() {
           <Route path="atm" element={<AtmPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="currency" element={<CurrencyPage />} />
+          <Route path="balance/:account" element={<BalancePage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

@@ -31,6 +31,7 @@ h1 {
 
 .table {
   width: 100%;
+  border-collapse: collapse;
 }
 
 .thead {
@@ -63,4 +64,5 @@ h1 {
 
 .tr {
   height: 50px;
+  border-bottom: 1px solid rgba(0, 82, 255, 0.1);
 }

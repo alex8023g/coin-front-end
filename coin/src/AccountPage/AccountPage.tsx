@@ -34,20 +34,6 @@ export function AccountPage() {
   // console.log(window.location.href.split('/').at(-1));
 
   const token = sessionStorage.getItem('auth');
-  // const monthName: { [N: string]: string } = {
-  //   '01': 'янв',
-  //   '02': 'фев',
-  //   '03': 'мар',
-  //   '04': 'апр',
-  //   '05': 'май',
-  //   '06': 'июн',
-  //   '07': 'июл',
-  //   '08': 'авг',
-  //   '09': 'сен',
-  //   '10': 'окт',
-  //   '11': 'ноя',
-  //   '12': 'дек',
-  // };
 
   const monthNameArr = [
     '',
@@ -192,91 +178,95 @@ export function AccountPage() {
             </Button>
           </div>
         </Paper>
+        <Link to={'/balance/' + account}>
+          <Paper
+            elevation={7}
+            sx={{
+              padding: '25px 50px',
+              width: '720px',
+              // flexBasis: 720,
+              borderRadius: 9,
+            }}
+          >
+            <h2>Динамика баланса</h2>
+            <ResponsiveContainer width={'99%'} height={165}>
+              <BarChart
+                // width={600}
+                // height={165}
+                // data={data}
+                data={balanceArr}
+              >
+                <CartesianGrid
+                  // vertical={false}
+                  verticalPoints={[5]}
+                  // x={1}
+                  // y={1}
+                  stroke="#000"
+                />
+                {/* <CartesianAxis /> */}
+                <XAxis dataKey="monthStr" tickLine={false} />
+                <YAxis orientation="right" tickCount={2} tickLine={false} />
+                <Bar dataKey="amount" fill="#116ACC" />
+              </BarChart>
+            </ResponsiveContainer>
+          </Paper>
+        </Link>
+      </div>
+      <Link to={'/balance/' + account}>
         <Paper
           elevation={7}
           sx={{
+            // display: 'flex',
             padding: '25px 50px',
-            width: '720px',
+            // width: '99%',
             // flexBasis: 720,
             borderRadius: 9,
+            backgroundColor: '#F3F4F6',
           }}
         >
-          <h2>Динамика баланса</h2>
-          <ResponsiveContainer width={'99%'} height={165}>
-            <BarChart
-              // width={600}
-              // height={165}
-              // data={data}
-              data={balanceArr}
-            >
-              <CartesianGrid
-                // vertical={false}
-                verticalPoints={[5]}
-                // x={1}
-                // y={1}
-                stroke="#000"
-              />
-              {/* <CartesianAxis /> */}
-              <XAxis dataKey="monthStr" tickLine={false} />
-              <YAxis orientation="right" tickCount={2} tickLine={false} />
-              <Bar dataKey="amount" fill="#116ACC" />
-            </BarChart>
-          </ResponsiveContainer>
+          <h2>История переводов</h2>
+          {/* <div>{accData.transactions[0].date.split('-')[1]}</div> */}
+          <table className={styles.table}>
+            <thead className={styles.thead}>
+              <tr>
+                <th className={styles.th + ' ' + styles.brLeft}>
+                  Счет отправителя
+                </th>
+                <th className={styles.th}>Счет получателя</th>
+                <th className={styles.th}>Сумма</th>
+                <th className={styles.th + ' ' + styles.brRight}>Дата</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lastTrans.map((trans) => {
+                if (trans.from === accData.account) {
+                  return (
+                    <tr className={styles.tr}>
+                      <td>{trans.from}</td>
+                      <td>{trans.to}</td>
+                      <td className={styles.colorRed}>- {trans.amount} ₽</td>
+                      <td>
+                        {trans.date.slice(0, 10).split('-').reverse().join('.')}
+                      </td>
+                    </tr>
+                  );
+                } else {
+                  return (
+                    <tr className={styles.tr}>
+                      <td>{trans.from}</td>
+                      <td>{trans.to}</td>
+                      <td className={styles.colorGreen}>+ {trans.amount} ₽</td>
+                      <td>
+                        {trans.date.slice(0, 10).split('-').reverse().join('.')}
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
+            </tbody>
+          </table>
         </Paper>
-      </div>
-      <Paper
-        elevation={7}
-        sx={{
-          // display: 'flex',
-          padding: '25px 50px',
-          // width: '99%',
-          // flexBasis: 720,
-          borderRadius: 9,
-          backgroundColor: '#F3F4F6',
-        }}
-      >
-        <h2>История переводов</h2>
-        {/* <div>{accData.transactions[0].date.split('-')[1]}</div> */}
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr>
-              <th className={styles.th + ' ' + styles.brLeft}>
-                Счет отправителя
-              </th>
-              <th className={styles.th}>Счет получателя</th>
-              <th className={styles.th}>Сумма</th>
-              <th className={styles.th + ' ' + styles.brRight}>Дата</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lastTrans.map((trans) => {
-              if (trans.from === accData.account) {
-                return (
-                  <tr className={styles.tr}>
-                    <td>{trans.from}</td>
-                    <td>{trans.to}</td>
-                    <td className={styles.colorRed}>- {trans.amount} ₽</td>
-                    <td>
-                      {trans.date.slice(0, 10).split('-').reverse().join('.')}
-                    </td>
-                  </tr>
-                );
-              } else {
-                return (
-                  <tr className={styles.tr}>
-                    <td>{trans.from}</td>
-                    <td>{trans.to}</td>
-                    <td className={styles.colorGreen}>+ {trans.amount} ₽</td>
-                    <td>
-                      {trans.date.slice(0, 10).split('-').reverse().join('.')}
-                    </td>
-                  </tr>
-                );
-              }
-            })}
-          </tbody>
-        </table>
-      </Paper>
+      </Link>
     </>
   );
 }

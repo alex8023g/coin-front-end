@@ -1,10 +1,19 @@
 import React from 'react';
 import styles from './balancepage.module.css';
 import { Link, useParams } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { useAccountData } from '../hooks/useAccountData';
+import { IAccount, ITransaction } from '../HomePage';
+import { IBalance } from '../AccountPage';
+import { BalanceChart1 } from '../BalanceChart1';
 
 export function BalancePage() {
+  const [accData, balanceArr, lastTrans] = useAccountData(12) as [
+    IAccount,
+    IBalance[],
+    ITransaction[]
+  ];
   const { account } = useParams();
 
   return (
@@ -31,6 +40,18 @@ export function BalancePage() {
           </p>
         </div>
       </div>
+      <Paper
+        elevation={7}
+        sx={{
+          padding: '25px 50px',
+          // width: '720px',
+          // flexBasis: 720,
+          borderRadius: 9,
+        }}
+      >
+        <h2>Динамика баланса</h2>
+        <BalanceChart1 balanceArr={balanceArr} />
+      </Paper>
     </>
   );
 }

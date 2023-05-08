@@ -36,7 +36,7 @@ export function BalancePage() {
           </Link>
           <p>
             <span className={styles.spanBalance}>Баланс</span>
-            {/* <span style={{ float: 'right' }}>{accData.balance} ₽</span> */}
+            <span style={{ float: 'right' }}>{accData.balance} ₽</span>
           </p>
         </div>
       </div>

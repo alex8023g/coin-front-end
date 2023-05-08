@@ -134,7 +134,7 @@ export function AccountPage() {
               </tr>
             </thead>
             <tbody>
-              {lastTrans.slice(0, 5).map((trans) => {
+              {lastTrans.slice(0, 100).map((trans) => {
                 if (trans.from === accData.account) {
                   return (
                     <tr className={styles.tr}>

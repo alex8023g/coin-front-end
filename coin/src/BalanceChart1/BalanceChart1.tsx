@@ -37,7 +37,7 @@ export function BalanceChart1({ balanceArr }: { balanceArr: IBalance[] }) {
           unit={'₽'}
           tick={{ fontSize: 16 }}
         />
-        <Bar dataKey="amount" fill="#116ACC" />
+        <Bar dataKey="balance" fill="#116ACC" />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -12,7 +12,7 @@ export function useAccountData(monthAmount: number) {
   const [accData, setAccData] = useState<IAccount>({
     account: '',
     balance: 0,
-    main: true,
+    mine: true,
     transactions: [{ amount: 0, date: '', from: '', to: '' }],
   });
   const [balanceArr, setBalanceArr] = useState<IBalance[]>([]);
@@ -49,53 +49,55 @@ export function useAccountData(monthAmount: number) {
       },
     })
       .then((res) => res.json())
-      .then(({ payload }: { payload: IAccount }) => {
-        console.log(payload);
-        setAccData(payload);
-        setLastTrans(payload.transactions);
-        let indexTr = payload.transactions.length - 1;
+      .then(({ payload: { account, balance, mine, transactions } }: { payload: IAccount }) => {
+        console.log(account, balance, mine, transactions);
+        setAccData({ account, balance, mine, transactions });
+        setLastTrans(transactions);
+        let indexTr = transactions.length - 1;
         let indexBal = 1;
 
-        const balance: IBalance[] = [];
-        if (payload.transactions[indexTr].date) {
-          balance.push({
-            amount: payload.transactions[indexTr].amount,
+        const balanceDyn: IBalance[] = [];
+        if (transactions[indexTr].date) {
+
+          balanceDyn.push({
+            amount: transactions[indexTr].amount,
             monthStr:
               monthNameArr[
-              Number(payload.transactions[indexTr].date.split('-')[1])
+              Number(transactions[indexTr].date.split('-')[1])
               ],
-            monthNum: Number(payload.transactions[indexTr].date.split('-')[1]),
+            monthNum: Number(transactions[indexTr].date.split('-')[1]),
           });
         } else return;
 
         do {
           const monthNum = Number(
-            payload.transactions[indexTr].date.split('-')[1]
+            transactions[indexTr].date.split('-')[1]
           );
-          // console.log(balance, { indexBal }, balance[indexBal]);
-          if (balance[indexBal - 1].monthStr === monthNameArr[monthNum]) {
-            // console.log('if');
-            balance[indexBal - 1].amount +=
-              payload.transactions[indexTr].amount;
+          // если месяц транзакции совпадает с месяцем динамики баланса
+          if (balanceDyn[indexBal - 1].monthStr === monthNameArr[monthNum]) {
+
+            if (account === transactions[indexTr].from) { }
+            balanceDyn[indexBal - 1].amount +=
+              transactions[indexTr].amount;
             indexTr--;
           } else if (
-            [1, -11].includes(balance[indexBal - 1].monthNum - monthNum)
+            [1, -11].includes(balanceDyn[indexBal - 1].monthNum - monthNum)
           ) {
             console.log('else if');
-            balance.push({
-              amount: payload.transactions[indexTr].amount,
+            balanceDyn.push({
+              amount: transactions[indexTr].amount,
               monthStr: monthNameArr[monthNum],
               monthNum,
             });
             indexBal++;
             indexTr--;
           } else {
-            console.log('else', { indexBal }, balance);
+            console.log('else', { indexBal }, balanceDyn);
             const monthNum2 =
-              balance[indexBal - 1].monthNum > 1
-                ? balance[indexBal - 1].monthNum - 1
+              balanceDyn[indexBal - 1].monthNum > 1
+                ? balanceDyn[indexBal - 1].monthNum - 1
                 : 12;
-            balance.push({
+            balanceDyn.push({
               amount: 0,
               monthStr: monthNameArr[monthNum2],
               monthNum: monthNum2,
@@ -103,9 +105,9 @@ export function useAccountData(monthAmount: number) {
             indexBal++;
             // indexTr--;
           }
-        } while (balance.length < monthAmount);
-        console.log(balance);
-        setBalanceArr(balance.reverse());
+        } while (balanceDyn.length < monthAmount);
+        console.log(balanceDyn);
+        setBalanceArr(balanceDyn.reverse());
       });
   }, [token]);
 

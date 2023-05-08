@@ -17,7 +17,7 @@ import { AccountCard } from '../AccountCard';
 export interface IAccount {
   account: string;
   balance: number;
-  main: boolean;
+  mine: boolean;
   transactions: ITransaction[];
 }
 

@@ -8,7 +8,6 @@ interface IBalance {
   dec: number;
   monthStr: string;
   monthNum: number;
-  year: number;
 }
 
 function getMonthNum(str: string) {
@@ -45,12 +44,10 @@ export function useAccountData(monthAmount: number) {
   ];
 
   const monthNow = new Date().getMonth();
-  const yearNow = new Date().getFullYear();
   const balanceArrTemp: IBalance[] = [];
 
   for (let i = 0; i < monthAmount; i++) {
     let monthNum = monthNow - i < 0 ? monthNow - i + 12 : monthNow - i;
-    let year = monthNow - i < 0 ? yearNow - 1 : yearNow;
 
     balanceArrTemp.push({
       balance: 0,
@@ -58,10 +55,9 @@ export function useAccountData(monthAmount: number) {
       dec: 0,
       monthNum,
       monthStr: monthNameArr[monthNum],
-      year,
     });
   }
-  // balanceArrTemp.reverse();
+  balanceArrTemp.reverse();
 
   console.log(balanceArrTemp);
   // setBalanceArr(balanceArr2);
@@ -132,71 +128,62 @@ export function useAccountData(monthAmount: number) {
             },
           ];
 
-          balanceArrTemp[0].balance = balance;
+          balanceArrTemp[monthAmount - 1].balance = balance;
+          let balanceIndex = monthAmount - 1;
 
-          let monthTrans = transactions.filter(
-            (trans) =>
-              new Date(trans.date).getFullYear() === yearNow &&
-              new Date(trans.date).getMonth() === monthNow
-          );
-          if (monthTrans[0]) {
+          for (let i = transactions.length - 1; i >= 0; i--) {
+            console.log(
+              balanceArrTemp[balanceIndex].monthNum,
+              getMonthNum(transactions[i].date)
+            );
+            // (месяц транзакции = месяцу баланса) => {index баланса -= 1, balance = balance[index +1]}
+            // (месяц транзакции = месяцу баланса + 1) => {баланс месяца +/- amount транзакции }
+            if (
+              balanceArrTemp[balanceIndex].monthNum ===
+              getMonthNum(transactions[i].date)
+            ) {
+              console.log('if');
+              balanceIndex--;
+              if (balanceIndex >= 0) {
+                balanceArrTemp[balanceIndex].balance = balance;
+                if (transactions[i].from === account) {
+                  balance = balance + transactions[i].amount;
+                  balanceArrTemp[balanceIndex + 1].dec =
+                    balanceArrTemp[balanceIndex + 1].dec +
+                    transactions[i].amount;
+                } else if (transactions[i].to === account) {
+                  balance = balance - transactions[i].amount;
+                  balanceArrTemp[balanceIndex + 1].inc =
+                    balanceArrTemp[balanceIndex + 1].inc +
+                    transactions[i].amount;
+                }
+                balanceArrTemp[balanceIndex].balance = balance;
+              } else {
+                break;
+              }
+            } else if (
+              balanceArrTemp[balanceIndex].monthNum ===
+              getMonthNum(transactions[i].date) - 1
+            ) {
+              // console.log('else if', balanceIndex);
+              if (transactions[i].from === account) {
+                balance = balance + transactions[i].amount;
+                balanceArrTemp[balanceIndex + 1].dec =
+                  balanceArrTemp[balanceIndex + 1].dec + transactions[i].amount;
+              } else if (transactions[i].to === account) {
+                balance = balance - transactions[i].amount;
+                balanceArrTemp[balanceIndex + 1].inc =
+                  balanceArrTemp[balanceIndex + 1].inc + transactions[i].amount;
+              }
+              balanceArrTemp[balanceIndex].balance = balance;
+            } else {
+              console.log('else');
+              balanceIndex--;
+              if (balanceIndex >= 0) {
+                balanceArrTemp[balanceIndex].balance = balance;
+              } else break;
+            }
           }
-
-          //   let balanceIndex = monthAmount - 1;
-
-          //   for (let i = transactions.length - 1; i >= 0; i--) {
-          //     console.log(
-          //       balanceArrTemp[balanceIndex].monthNum,
-          //       getMonthNum(transactions[i].date)
-          //     );
-          //     // (месяц транзакции = месяцу баланса) => {index баланса -= 1, balance = balance[index +1]}
-          //     // (месяц транзакции = месяцу баланса + 1) => {баланс месяца +/- amount транзакции }
-          //     if (
-          //       balanceArrTemp[balanceIndex].monthNum ===
-          //       getMonthNum(transactions[i].date)
-          //     ) {
-          //       console.log('if');
-          //       balanceIndex--;
-          //       if (balanceIndex >= 0) {
-          //         balanceArrTemp[balanceIndex].balance = balance;
-          //         if (transactions[i].from === account) {
-          //           balance = balance + transactions[i].amount;
-          //           balanceArrTemp[balanceIndex + 1].dec =
-          //             balanceArrTemp[balanceIndex + 1].dec +
-          //             transactions[i].amount;
-          //         } else if (transactions[i].to === account) {
-          //           balance = balance - transactions[i].amount;
-          //           balanceArrTemp[balanceIndex + 1].inc =
-          //             balanceArrTemp[balanceIndex + 1].inc +
-          //             transactions[i].amount;
-          //         }
-          //         balanceArrTemp[balanceIndex].balance = balance;
-          //       } else {
-          //         break;
-          //       }
-          //     } else if (
-          //       balanceArrTemp[balanceIndex].monthNum ===
-          //       getMonthNum(transactions[i].date) - 1
-          //     ) {
-          //       // console.log('else if', balanceIndex);
-          //       if (transactions[i].from === account) {
-          //         balance = balance + transactions[i].amount;
-          //         balanceArrTemp[balanceIndex + 1].dec =
-          //           balanceArrTemp[balanceIndex + 1].dec + transactions[i].amount;
-          //       } else if (transactions[i].to === account) {
-          //         balance = balance - transactions[i].amount;
-          //         balanceArrTemp[balanceIndex + 1].inc =
-          //           balanceArrTemp[balanceIndex + 1].inc + transactions[i].amount;
-          //       }
-          //       balanceArrTemp[balanceIndex].balance = balance;
-          //     } else {
-          //       console.log('else');
-          //       balanceIndex--;
-          //       if (balanceIndex >= 0) {
-          //         balanceArrTemp[balanceIndex].balance = balance;
-          //       } else break;
-          //     }
-          //   }
           setBalanceArr(balanceArrTemp);
         }
       );

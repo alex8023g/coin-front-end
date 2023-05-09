@@ -6,6 +6,7 @@ import {
   BarChart,
   CartesianGrid,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
@@ -37,6 +38,7 @@ export function BalanceChart1({ balanceArr }: { balanceArr: IBalance[] }) {
           unit={'₽'}
           tick={{ fontSize: 16 }}
         />
+        <Tooltip />
         <Bar dataKey="balance" fill="#116ACC" />
       </BarChart>
     </ResponsiveContainer>

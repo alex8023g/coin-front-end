@@ -39,7 +39,7 @@ export function BalanceChart1({ balanceArr }: { balanceArr: IBalance[] }) {
           tick={{ fontSize: 16 }}
         />
         <Tooltip />
-        <Bar dataKey="balance" fill="#116ACC" />
+        <Bar dataKey="balanceMonth" fill="#116ACC" />
       </BarChart>
     </ResponsiveContainer>
   );

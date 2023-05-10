@@ -1,6 +1,9 @@
 import React, { ChangeEvent, SetStateAction, useState } from 'react';
 import styles from './loginpage.module.css';
 import { Navigate } from 'react-router-dom';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 export function LoginPage() {
   const [login, setLogin] = useState('');
@@ -62,6 +65,39 @@ export function LoginPage() {
         </div>
         <button type="submit">Войти</button>
       </form>
+      <Paper
+        elevation={7}
+        sx={{
+          padding: '25px 50px',
+          // flexBasis: 500,
+          borderRadius: 9,
+          backgroundColor: '#F3F4F6',
+        }}
+      >
+        <h2>Новый перевод</h2>
+        <div className={styles.newRemittanceCont}>
+          <div className={styles.textFieldCont}>
+            <TextField
+              required
+              id="outlined-basic2"
+              label="Логин"
+              variant="outlined"
+              sx={{ marginBottom: '25px', width: 300 }}
+            />
+            <TextField
+              required
+              id="outlined-basic2"
+              label="Пароль"
+              type="password"
+              variant="outlined"
+              sx={{ width: 300 }}
+            />
+          </div>
+          <Button variant="contained" sx={{ padding: '14px 40px' }}>
+            отправить
+          </Button>
+        </div>
+      </Paper>
     </>
   );
 }

@@ -7,6 +7,9 @@ import { useAccountData } from '../hooks/useAccountData';
 import { IAccount, ITransaction } from '../HomePage';
 import { IBalance } from '../AccountPage';
 import { BalanceChart1 } from '../BalanceChart1';
+import { BalanceChart2 } from '../BalanceChart2';
+import { ContactSupport } from '@mui/icons-material';
+import { BalanceTable } from '../BalanceTable';
 
 export function BalancePage() {
   const [accData, balanceArr, lastTrans] = useAccountData(12) as [
@@ -47,10 +50,37 @@ export function BalancePage() {
           // width: '720px',
           // flexBasis: 720,
           borderRadius: 9,
+          marginBottom: 5,
         }}
       >
         <h2>Динамика баланса</h2>
         <BalanceChart1 balanceArr={balanceArr} />
+      </Paper>
+
+      <Paper
+        elevation={7}
+        sx={{
+          padding: '25px 50px',
+          // width: '720px',
+          // flexBasis: 720,
+          borderRadius: 9,
+          marginBottom: 5,
+        }}
+      >
+        <h2>Соотношение входящих исходящих транзакций</h2>
+        <BalanceChart2 balanceArr={balanceArr} />
+      </Paper>
+
+      <Paper
+        elevation={7}
+        sx={{
+          padding: '25px 50px',
+          borderRadius: 9,
+          backgroundColor: '#F3F4F6',
+        }}
+      >
+        <h2>История переводов</h2>
+        <BalanceTable accData={accData} lastTrans={lastTrans} />
       </Paper>
     </>
   );

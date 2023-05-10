@@ -16,6 +16,7 @@ import {
 } from 'recharts';
 import { useAccountData } from '../hooks/useAccountData';
 import { BalanceChart1 } from '../BalanceChart1';
+import { BalanceTable } from '../BalanceTable';
 
 export interface IBalance {
   amount: number;
@@ -122,7 +123,8 @@ export function AccountPage() {
         >
           <h2>История переводов</h2>
           {/* <div>{accData.transactions[0].date.split('-')[1]}</div> */}
-          <table className={styles.table}>
+          <BalanceTable accData={accData} lastTrans={lastTrans} />
+          {/* <table className={styles.table}>
             <thead className={styles.thead}>
               <tr>
                 <th className={styles.th + ' ' + styles.brLeft}>
@@ -160,7 +162,7 @@ export function AccountPage() {
                 }
               })}
             </tbody>
-          </table>
+          </table> */}
         </Paper>
       </Link>
     </>

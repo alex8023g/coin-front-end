@@ -85,19 +85,24 @@ export function useAccountData(monthAmount: number) {
           setAccData({ account, balance, mine, transactions });
           setLastTrans(transactions.slice().reverse());
 
-          // тестовые транзакции
-          /**
-
+          // тестовые транзакции начало
+          //
           transactions = [
             {
               amount: 1000000,
-              date: '2023-11-28T09:46:54.884Z',
+              date: '2022-11-28T09:46:54.884Z',
               from: '71370733101553022523146507',
               to: '74213041477477406320783754',
             },
             {
-              amount: 1000000,
-              date: '2023-12-28T09:46:57.884Z',
+              amount: 500000,
+              date: '2022-12-28T09:46:57.884Z',
+              from: '74213041477477406320783754',
+              to: '46010282515715723857833486',
+            },
+            {
+              amount: 200000,
+              date: '2022-12-28T09:46:57.884Z',
               from: '46010282515715723857833486',
               to: '74213041477477406320783754',
             },
@@ -132,15 +137,14 @@ export function useAccountData(monthAmount: number) {
               to: '74213041477477406320783754',
             },
             {
-              amount: 1000000,
+              amount: 500000,
               date: '2023-05-28T09:47:27.914Z',
-              from: '28464001178338455251027723',
-              to: '74213041477477406320783754',
+              from: '74213041477477406320783754',
+              to: '28464001178338455251027723',
             },
           ];
-          /*/
-
-          // balanceArrTemp[0].balanceMonth = balance;
+          setLastTrans(transactions.slice().reverse());
+          // конец тестовые транзакции
 
           balanceArrTemp.forEach((item, index) => {
             item.balanceMonth = balance;
@@ -171,9 +175,9 @@ export function useAccountData(monthAmount: number) {
             balance += monthTransDec;
           });
 
-          console.log(balanceArrTemp);
-
-          setBalanceArr(balanceArrTemp.reverse());
+          // const balanceArrTempCopy = structuredClone(balanceArrTemp).reverse();
+          // setBalanceArr(balanceArrTempCopy);
+          setBalanceArr(balanceArrTemp.slice().reverse());
         }
       );
   }, [token]);

@@ -1,13 +1,32 @@
-.loginForm {
+/* .loginForm {
   margin: 0 auto;
   padding-top: 50px;
   width: 500px;
   height: 366px;
   background-color: #f3f4f6;
   border-radius: 56px;
-}
+} */
 
 .h2 {
-  text-align: center;
-  margin-bottom: 35px;
+  /* text-align: center; */
+  margin: 0 0 35px 80px;
+}
+
+.loginCont {
+  display: flex;
+  align-items: center;
+  margin: 0 0 25px 10px;
+}
+
+.passCont {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin-bottom: 30px;
+}
+
+.spanLogPass {
+  margin-right: 18px;
+  height: 100%;
+  font-weight: 700;
 }

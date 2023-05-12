@@ -17,6 +17,7 @@ import {
 import { useAccountData } from '../hooks/useAccountData';
 import { BalanceChart1 } from '../BalanceChart1';
 import { BalanceTable } from '../BalanceTable';
+import { produce } from 'immer';
 
 export interface IBalance {
   amount: number;
@@ -24,14 +25,43 @@ export interface IBalance {
   monthNum: number;
 }
 
+interface ITransfer {
+  from: string;
+  to: string;
+  amount: string;
+}
+
 export function AccountPage() {
+  const token = sessionStorage.getItem('auth');
+
   const [accData, balanceArr, lastTrans] = useAccountData(6) as [
     IAccount,
     IBalance[],
     ITransaction[]
   ];
-
   const { account } = useParams();
+  const [transferFunds, setTransferFunds] = useState<ITransfer>({
+    from: account ?? '',
+    to: '',
+    amount: '',
+  });
+
+  function handleTransfer() {
+    console.log(transferFunds);
+
+    fetch(process.env.REACT_APP_API_SERVER + '/transfer-funds', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Basic ${token}`,
+      },
+      body: JSON.stringify(transferFunds),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  }
 
   return (
     <>
@@ -75,15 +105,35 @@ export function AccountPage() {
                 label="Номер счета получателя"
                 variant="outlined"
                 sx={{ marginBottom: '25px', width: 300 }}
+                value={transferFunds.to}
+                onChange={(e) => {
+                  setTransferFunds(
+                    produce((draft) => {
+                      draft.to = e.target.value;
+                    })
+                  );
+                }}
               />
               <TextField
                 id="outlined-basic2"
                 label="Сумма перевода"
                 variant="outlined"
                 sx={{ width: 300 }}
+                value={transferFunds.amount}
+                onChange={(e) => {
+                  setTransferFunds(
+                    produce((draft) => {
+                      draft.amount = e.target.value;
+                    })
+                  );
+                }}
               />
             </div>
-            <Button variant="contained" sx={{ padding: '14px 40px' }}>
+            <Button
+              variant="contained"
+              sx={{ padding: '14px 40px' }}
+              onClick={handleTransfer}
+            >
               <MailOutlineIcon sx={{ marginRight: '7px' }} />
               отправить
             </Button>

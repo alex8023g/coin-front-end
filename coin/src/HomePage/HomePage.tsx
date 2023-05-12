@@ -10,6 +10,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  SelectChangeEvent,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { AccountCard } from '../AccountCard';
@@ -27,9 +28,10 @@ export interface ITransaction {
   from: string;
   to: string;
 }
+
 export function HomePage() {
   const [accounts, setAccounts] = useState<IAccount[]>();
-  const [sortType, setSortType] = useState<string>('');
+  const [sortType, setSortType] = useState('');
   const token = sessionStorage.getItem('auth');
 
   useEffect(() => {
@@ -68,7 +70,26 @@ export function HomePage() {
       });
   }
 
-  console.log(styles);
+  // function sortBy(e: SelectChangeEvent) {
+  function sortBy({ target: { value } }: SelectChangeEvent) {
+    console.log(value);
+    // console.log(e.target.value);
+    setSortType(value);
+    setAccounts((accounts) => {
+      switch (value) {
+        case 'account':
+          return accounts?.sort((a, b) => a.account.localeCompare(b.account));
+        case 'balance':
+          return accounts?.sort((a, b) => a.balance - b.balance);
+        case 'lastTransDate':
+          return accounts?.sort(
+            (a, b) =>
+              new Date(a.transactions[0]?.date).getTime() -
+              new Date(b.transactions[0]?.date).getTime()
+          );
+      }
+    });
+  }
 
   return (
     <>
@@ -83,11 +104,11 @@ export function HomePage() {
               // id="select-label"
               value={sortType}
               label="Сортировка"
-              onChange={(e) => setSortType(e.target.value)}
+              onChange={sortBy}
             >
-              <MenuItem value={'byNumber'}>По номеру</MenuItem>
-              <MenuItem value={'byBalance'}>По балансу</MenuItem>
-              <MenuItem value={'byLastTransDate'}>
+              <MenuItem value={'account'}>По номеру</MenuItem>
+              <MenuItem value={'balance'}>По балансу</MenuItem>
+              <MenuItem value={'lastTransDate'}>
                 По последней транзакции
               </MenuItem>
             </Select>
@@ -97,7 +118,7 @@ export function HomePage() {
             onClick={createAccount}
             sx={{ p: '14px 24px 14px 18px', float: 'right', borderRadius: 2 }}
           >
-            <AddIcon sx={{ mr: 1 }} /> cоздать новый счет
+            <AddIcon sx={{ mr: 1 }} /> создать новый счет
           </Button>
         </div>
       )}
@@ -113,7 +134,12 @@ export function HomePage() {
       >
         {accounts &&
           accounts.map((accountData) => {
-            return <AccountCard accountData={accountData} />;
+            return (
+              <AccountCard
+                accountData={accountData}
+                key={accountData.account}
+              />
+            );
           })}
       </Box>
     </>

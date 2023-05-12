@@ -13,8 +13,9 @@ export function AccountCard({ accountData }: { accountData: IAccount }) {
   return (
     <Paper
       sx={{
-        width: 380,
-        mb: 7,
+        // width: 380,
+        maxWidth: 480,
+        // mb: 7,
         p: 2.2,
         borderRadius: 3,
       }}

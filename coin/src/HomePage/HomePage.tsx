@@ -68,6 +68,8 @@ export function HomePage() {
       });
   }
 
+  console.log(styles);
+
   return (
     <>
       {!token && <Navigate to="login" />}
@@ -101,10 +103,12 @@ export function HomePage() {
       )}
       <Box
         sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-around',
-          gap: 3,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+          // flexWrap: 'wrap',
+          // justifyContent: 'space-around',
+          gridColumnGap: '2vw',
+          gridRowGap: '50px',
         }}
       >
         {accounts &&

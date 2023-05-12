@@ -1,3 +1,12 @@
+добавить:
+
+- grid на странице счета
+- сортировку на странице счета
+- спинеры (при загрузке при медленном интернете)
+- обработку ошибок
+- сообщения при ошибках и неверном пароле / логине
+- проверку данных в формах
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

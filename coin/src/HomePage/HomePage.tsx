@@ -80,12 +80,12 @@ export function HomePage() {
         case 'account':
           return accounts?.sort((a, b) => a.account.localeCompare(b.account));
         case 'balance':
-          return accounts?.sort((a, b) => a.balance - b.balance);
+          return accounts?.sort((a, b) => b.balance - a.balance);
         case 'lastTransDate':
           return accounts?.sort(
             (a, b) =>
-              new Date(a.transactions[0]?.date).getTime() -
-              new Date(b.transactions[0]?.date).getTime()
+              (new Date(b.transactions[0]?.date).getTime() || 0) -
+              (new Date(a.transactions[0]?.date).getTime() || 0)
           );
       }
     });

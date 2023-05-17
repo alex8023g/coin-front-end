@@ -86,7 +86,7 @@ export function useAccountData(monthAmount: number) {
           setLastTrans(transactions.slice().reverse());
 
           // тестовые транзакции начало
-          //
+          /*/
           transactions = [
             {
               amount: 1000000,
@@ -145,7 +145,7 @@ export function useAccountData(monthAmount: number) {
           ];
           setLastTrans(transactions.slice().reverse());
           // конец тестовые транзакции
-
+          //*/
           balanceArrTemp.forEach((item, index) => {
             item.balanceMonth = balance;
 

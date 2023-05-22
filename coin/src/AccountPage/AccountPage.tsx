@@ -34,7 +34,7 @@ interface ITransfer {
 export function AccountPage() {
   const token = sessionStorage.getItem('auth');
 
-  const [accData, balanceArr, lastTrans] = useAccountData(6) as [
+  const [accData, balanceArr, lastTrans] = useAccountData(6, 10) as [
     IAccount,
     IBalance[],
     ITransaction[]

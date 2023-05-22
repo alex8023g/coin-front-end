@@ -12,7 +12,7 @@ import { ContactSupport } from '@mui/icons-material';
 import { BalanceTable } from '../BalanceTable';
 
 export function BalancePage() {
-  const [accData, balanceArr, lastTrans] = useAccountData(12) as [
+  const [accData, balanceArr, lastTrans] = useAccountData(12, 25) as [
     IAccount,
     IBalance[],
     ITransaction[]

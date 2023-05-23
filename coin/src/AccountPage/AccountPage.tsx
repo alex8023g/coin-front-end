@@ -150,7 +150,7 @@ export function AccountPage() {
             }}
           >
             <h2>Динамика баланса</h2>
-            <BalanceChart1 balanceArr={balanceArr} />
+            <BalanceChart1 balanceArr={balanceArr} tickCount={3} />
             {/* <ResponsiveContainer width={'99%'} height={165}>
               <BarChart data={balanceArr}>
                 <CartesianGrid verticalPoints={[5]} stroke="#000" />

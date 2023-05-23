@@ -12,7 +12,13 @@ import {
 } from 'recharts';
 import { IBalance } from '../AccountPage';
 
-export function BalanceChart1({ balanceArr }: { balanceArr: IBalance[] }) {
+export function BalanceChart1({
+  balanceArr,
+  tickCount,
+}: {
+  balanceArr: IBalance[];
+  tickCount: number;
+}) {
   return (
     <ResponsiveContainer width={'99%'} height={165}>
       <BarChart
@@ -20,7 +26,7 @@ export function BalanceChart1({ balanceArr }: { balanceArr: IBalance[] }) {
         // height={165}
         // data={data}
         data={balanceArr}
-        margin={{ right: 50 }}
+        margin={{ right: 60 }}
       >
         <CartesianGrid
           // vertical={false}
@@ -33,8 +39,9 @@ export function BalanceChart1({ balanceArr }: { balanceArr: IBalance[] }) {
         <XAxis dataKey="monthStr" tickLine={false} />
         <YAxis
           orientation="right"
-          tickCount={3}
+          tickCount={tickCount}
           tickLine={false}
+          // tickLine={false}
           unit={'₽'}
           tick={{ fontSize: 16 }}
           type="number"

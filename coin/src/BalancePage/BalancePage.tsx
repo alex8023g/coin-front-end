@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './balancepage.module.css';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Paper } from '@mui/material';
+import TablePagination from '@mui/material/TablePagination';
+
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useAccountData } from '../hooks/useAccountData';
 import { IAccount, ITransaction } from '../HomePage';
@@ -12,12 +14,32 @@ import { ContactSupport } from '@mui/icons-material';
 import { BalanceTable } from '../BalanceTable';
 
 export function BalancePage() {
-  const [accData, balanceArr, lastTrans] = useAccountData(12, 25) as [
+  const [accData, balanceArr, lastTrans] = useAccountData(12) as [
     IAccount,
     IBalance[],
     ITransaction[]
   ];
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [displayedTrans, setDisplayedTrans] = useState([]);
   const { account } = useParams();
+
+  function handlePagChange(
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) {
+    setDisplayedTrans((st) =>
+      st.slice(newPage * rowsPerPage, newPage + rowsPerPage)
+    );
+    setPage(newPage);
+  }
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <>
@@ -81,6 +103,15 @@ export function BalancePage() {
       >
         <h2>История переводов</h2>
         <BalanceTable accData={accData} lastTrans={lastTrans} />
+        <TablePagination
+          component="div"
+          count={98}
+          page={page}
+          onPageChange={handlePagChange}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        <div>{page}</div>
       </Paper>
     </>
   );

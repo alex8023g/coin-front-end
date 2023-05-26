@@ -15,7 +15,10 @@ function getMonthNum(str: string) {
   return Number(str.split('-')[1]) - 1;
 }
 
-export function useAccountData(monthAmount: number, transAmount: number) {
+export function useAccountData(
+  monthAmount: number
+  // transAmount: number
+) {
   const [accData, setAccData] = useState<IAccount>({
     account: '',
     balance: 0,
@@ -83,7 +86,7 @@ export function useAccountData(monthAmount: number, transAmount: number) {
         }) => {
           console.log(account, balance, mine, transactions);
           setAccData({ account, balance, mine, transactions });
-          setLastTrans(transactions.slice(-transAmount).reverse());
+          setLastTrans(transactions.slice().reverse());
 
           // тестовые транзакции начало
           /*/

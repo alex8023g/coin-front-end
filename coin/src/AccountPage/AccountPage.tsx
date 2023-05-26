@@ -34,7 +34,7 @@ interface ITransfer {
 export function AccountPage() {
   const token = sessionStorage.getItem('auth');
 
-  const [accData, balanceArr, lastTrans] = useAccountData(6, 10) as [
+  const [accData, balanceArr, lastTrans] = useAccountData(6) as [
     IAccount,
     IBalance[],
     ITransaction[]
@@ -173,7 +173,7 @@ export function AccountPage() {
         >
           <h2>История переводов</h2>
           {/* <div>{accData.transactions[0].date.split('-')[1]}</div> */}
-          <BalanceTable accData={accData} lastTrans={lastTrans} />
+          <BalanceTable accData={accData} lastTrans={lastTrans.slice(-10)} />
           {/* <table className={styles.table}>
             <thead className={styles.thead}>
               <tr>

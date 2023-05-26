@@ -31,6 +31,7 @@ export function BalanceChart1({
         <CartesianGrid
           // vertical={false}
           verticalPoints={[0]}
+          horizontalPoints={[0]}
           // x={1}
           // y={1}
           stroke="#000"

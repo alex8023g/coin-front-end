@@ -18,6 +18,7 @@ import { useAccountData } from '../hooks/useAccountData';
 import { BalanceChart1 } from '../BalanceChart1';
 import { BalanceTable } from '../BalanceTable';
 import { produce } from 'immer';
+import { Message } from '../Message';
 
 export interface IBalance {
   amount: number;
@@ -30,6 +31,8 @@ interface ITransfer {
   to: string;
   amount: string;
 }
+
+export type typeMsg = 'success' | 'error';
 
 export function AccountPage() {
   const token = sessionStorage.getItem('auth');
@@ -45,10 +48,15 @@ export function AccountPage() {
     to: '',
     amount: '',
   });
-
+  const [isMsgOpen, setIsMsgOpen] = useState(false);
+  const [textMsg, setTextMsg] = useState('');
+  const [typeMsg, setTypeMsg] = useState<typeMsg>('success');
+  const [isInvalid, setIsInvalid] = useState(false);
   function handleTransfer() {
     console.log(transferFunds);
-
+    if (!transferFunds.amount || !transferFunds.from || !transferFunds.to) {
+      return;
+    }
     fetch(process.env.REACT_APP_API_SERVER + '/transfer-funds', {
       method: 'POST',
       headers: {
@@ -58,8 +66,17 @@ export function AccountPage() {
       body: JSON.stringify(transferFunds),
     })
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
+      .then(({ payload, error }) => {
+        console.log(payload, error);
+        setIsMsgOpen(true);
+        if (payload) {
+          console.log(payload);
+          setTypeMsg('success');
+          setTextMsg('Перевод успешно выполнен');
+        } else {
+          setTypeMsg('error');
+          setTextMsg(error);
+        }
       });
   }
 
@@ -115,6 +132,8 @@ export function AccountPage() {
                 }}
               />
               <TextField
+                error={isInvalid}
+                helperText={isInvalid && 'Сумма указана некорректно'}
                 id="outlined-basic2"
                 label="Сумма перевода"
                 variant="outlined"
@@ -126,6 +145,16 @@ export function AccountPage() {
                       draft.amount = e.target.value;
                     })
                   );
+                  if (!e.target.value) {
+                    setIsInvalid(false);
+                  } else if (
+                    !Number(e.target.value) ||
+                    Number(e.target.value) < 0
+                  ) {
+                    setIsInvalid(true);
+                  } else {
+                    setIsInvalid(false);
+                  }
                 }}
               />
             </div>
@@ -139,28 +168,25 @@ export function AccountPage() {
             </Button>
           </div>
         </Paper>
-        <Link to={'/balance/' + account}>
-          <Paper
-            elevation={7}
-            sx={{
-              padding: '25px 50px',
-              width: '720px',
-              // flexBasis: 720,
-              borderRadius: 9,
-            }}
-          >
-            <h2>Динамика баланса</h2>
-            <BalanceChart1 balanceArr={balanceArr} tickCount={3} />
-            {/* <ResponsiveContainer width={'99%'} height={165}>
-              <BarChart data={balanceArr}>
-                <CartesianGrid verticalPoints={[5]} stroke="#000" />
-                <XAxis dataKey="monthStr" tickLine={false} />
-                <YAxis orientation="right" tickCount={2} tickLine={false} />
-                <Bar dataKey="amount" fill="#116ACC" />
-              </BarChart>
-            </ResponsiveContainer> */}
-          </Paper>
-        </Link>
+        {/* <Link to={'/balance/' + account}> */}
+        <Paper
+          onClick={() => {
+            window.location.replace(`/balance/${account}`);
+          }}
+          // onCkick={() => {}}
+          elevation={7}
+          sx={{
+            padding: '25px 50px',
+            // width: '720px',
+            flexBasis: '720px',
+            borderRadius: 9,
+            cursor: 'pointer',
+          }}
+        >
+          <h2>Динамика баланса</h2>
+          <BalanceChart1 balanceArr={balanceArr} tickCount={3} />
+        </Paper>
+        {/* </Link> */}
       </div>
       <Link to={'/balance/' + account}>
         <Paper
@@ -174,47 +200,14 @@ export function AccountPage() {
           <h2>История переводов</h2>
           {/* <div>{accData.transactions[0].date.split('-')[1]}</div> */}
           <BalanceTable accData={accData} lastTrans={lastTrans.slice(-10)} />
-          {/* <table className={styles.table}>
-            <thead className={styles.thead}>
-              <tr>
-                <th className={styles.th + ' ' + styles.brLeft}>
-                  Счет отправителя
-                </th>
-                <th className={styles.th}>Счет получателя</th>
-                <th className={styles.th}>Сумма</th>
-                <th className={styles.th + ' ' + styles.brRight}>Дата</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lastTrans.slice(0, 100).map((trans) => {
-                if (trans.from === accData.account) {
-                  return (
-                    <tr className={styles.tr}>
-                      <td>{trans.from}</td>
-                      <td>{trans.to}</td>
-                      <td className={styles.colorRed}>- {trans.amount} ₽</td>
-                      <td>
-                        {trans.date.slice(0, 10).split('-').reverse().join('.')}
-                      </td>
-                    </tr>
-                  );
-                } else {
-                  return (
-                    <tr className={styles.tr}>
-                      <td>{trans.from}</td>
-                      <td>{trans.to}</td>
-                      <td className={styles.colorGreen}>+ {trans.amount} ₽</td>
-                      <td>
-                        {trans.date.slice(0, 10).split('-').reverse().join('.')}
-                      </td>
-                    </tr>
-                  );
-                }
-              })}
-            </tbody>
-          </table> */}
         </Paper>
       </Link>
+      <Message
+        isMsgOpen={isMsgOpen}
+        setIsMsgOpen={setIsMsgOpen}
+        textMsg={textMsg}
+        typeMsg={typeMsg}
+      />
     </>
   );
 }

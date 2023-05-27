@@ -3,6 +3,7 @@ import styles from './currencypage.module.css';
 import {
   Box,
   Button,
+  ClickAwayListener,
   Divider,
   FormControl,
   InputLabel,
@@ -18,6 +19,8 @@ import { ReactComponent as ArrowUp } from '../assets/arrowup.svg';
 import { ReactComponent as ArrowDown } from '../assets/arrowdown.svg';
 import { nanoid } from 'nanoid';
 import { Navigate } from 'react-router-dom';
+import { Message } from '../Message';
+import { typeMsg } from '../AccountPage';
 
 interface ICurrency {
   amount: number;
@@ -46,6 +49,12 @@ export function CurrencyPage() {
     to: '',
     amount: '',
   });
+  const [isMsgOpen, setIsMsgOpen] = useState(false);
+  const [textMsg, setTextMsg] = useState('');
+  const [typeMsg, setTypeMsg] = useState<typeMsg>('success');
+
+  const [isInvalid, setIsInvalid] = useState(false);
+
   const updateCurrencies = useRef(0);
 
   useEffect(() => {
@@ -107,6 +116,7 @@ export function CurrencyPage() {
 
   function handleExchange() {
     console.log(exchange);
+    if (isInvalid) return;
     fetch(process.env.REACT_APP_API_SERVER + '/currency-buy', {
       method: 'POST',
       headers: {
@@ -116,8 +126,17 @@ export function CurrencyPage() {
       body: JSON.stringify(exchange),
     })
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
+      .then(({ payload, error }) => {
+        console.log(payload, error);
+        setIsMsgOpen(true);
+        if (payload) {
+          console.log(payload);
+          setTypeMsg('success');
+          setTextMsg('Обмен успешно выполнен');
+        } else {
+          setTypeMsg('error');
+          setTextMsg(error);
+        }
         updateCurrencies.current++;
       });
   }
@@ -150,6 +169,7 @@ export function CurrencyPage() {
               ))}
             </ul>
           </Paper>
+
           <Paper
             elevation={7}
             sx={{ marginBottom: 4, width: 540, padding: 5, borderRadius: 9 }}
@@ -214,6 +234,8 @@ export function CurrencyPage() {
                   <div className={styles.currChangeSum}>
                     <span className={styles.spanCurrChange}> Сумма </span>
                     <TextField
+                      error={isInvalid}
+                      helperText={isInvalid && 'Сумма указана некорректно'}
                       id="outlined-controlled"
                       // label="Controlled"
                       sx={{ flexGrow: 1 }}
@@ -226,6 +248,16 @@ export function CurrencyPage() {
                             draft.amount = e.target.value;
                           })
                         );
+                        if (!e.target.value) {
+                          setIsInvalid(false);
+                        } else if (
+                          !Number(e.target.value) ||
+                          Number(e.target.value) < 0
+                        ) {
+                          setIsInvalid(true);
+                        } else {
+                          setIsInvalid(false);
+                        }
                       }}
                     />
                   </div>
@@ -272,6 +304,12 @@ export function CurrencyPage() {
           </ul>
         </Paper>
       </Box>
+      <Message
+        isMsgOpen={isMsgOpen}
+        setIsMsgOpen={setIsMsgOpen}
+        textMsg={textMsg}
+        typeMsg={typeMsg}
+      />
     </>
   );
 }

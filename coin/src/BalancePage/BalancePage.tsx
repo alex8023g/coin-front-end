@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import styles from './balancepage.module.css';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Paper } from '@mui/material';
@@ -21,8 +21,12 @@ export function BalancePage() {
   ];
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [displayedTrans, setDisplayedTrans] = useState([]);
+  const [displayedTrans, setDisplayedTrans] = useState<ITransaction[]>([]);
   const { account } = useParams();
+
+  useLayoutEffect(() => {
+    setDisplayedTrans(lastTrans.slice(page, page + rowsPerPage));
+  }, [lastTrans, page, rowsPerPage]);
 
   function handlePagChange(
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -102,7 +106,7 @@ export function BalancePage() {
         }}
       >
         <h2>История переводов</h2>
-        <BalanceTable accData={accData} lastTrans={lastTrans} />
+        <BalanceTable accData={accData} lastTrans={displayedTrans} />
         <TablePagination
           component="div"
           count={98}
@@ -111,7 +115,6 @@ export function BalancePage() {
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-        <div>{page}</div>
       </Paper>
     </>
   );

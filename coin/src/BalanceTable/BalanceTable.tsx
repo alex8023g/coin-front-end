@@ -24,31 +24,43 @@ export function BalanceTable({
           </tr>
         </thead>
         <tbody>
-          {lastTrans.slice(0, 100).map((trans) => {
-            if (trans.from === accData.account) {
-              return (
-                <tr className={styles.tr}>
-                  <td>{trans.from}</td>
-                  <td>{trans.to}</td>
-                  <td className={styles.colorRed}>- {trans.amount} ₽</td>
-                  <td>
-                    {trans.date.slice(0, 10).split('-').reverse().join('.')}
-                  </td>
-                </tr>
-              );
-            } else {
-              return (
-                <tr className={styles.tr}>
-                  <td>{trans.from}</td>
-                  <td>{trans.to}</td>
-                  <td className={styles.colorGreen}>+ {trans.amount} ₽</td>
-                  <td>
-                    {trans.date.slice(0, 10).split('-').reverse().join('.')}
-                  </td>
-                </tr>
-              );
-            }
-          })}
+          {lastTrans.slice(0, 100).map(
+            (trans, i) => (
+              // {
+              // if (trans.from === accData.account) {
+              // return
+              <tr key={i} className={styles.tr}>
+                <td>{trans.from}</td>
+                <td>{trans.to}</td>
+                <td
+                  className={
+                    trans.from === accData.account
+                      ? styles.colorRed
+                      : styles.colorGreen
+                  }
+                >
+                  - {trans.amount} ₽
+                </td>
+                <td>
+                  {trans.date.slice(0, 10).split('-').reverse().join('.')}
+                </td>
+              </tr>
+            )
+            // ;
+            // } else {
+            //   return (
+            //     <tr className={styles.tr}>
+            //       <td>{trans.from}</td>
+            //       <td>{trans.to}</td>
+            //       <td className={styles.colorGreen}>+ {trans.amount} ₽</td>
+            //       <td>
+            //         {trans.date.slice(0, 10).split('-').reverse().join('.')}
+            //       </td>
+            //     </tr>
+            //   );
+            // }
+            // }
+          )}
         </tbody>
       </table>
     </>

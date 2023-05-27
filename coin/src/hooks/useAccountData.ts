@@ -84,7 +84,7 @@ export function useAccountData(
         }: {
           payload: IAccount;
         }) => {
-          console.log(account, balance, mine, transactions);
+          // console.log(account, balance, mine, transactions);
           setAccData({ account, balance, mine, transactions });
           setLastTrans(transactions.slice().reverse());
 
@@ -161,7 +161,7 @@ export function useAccountData(
               )
               .reduce((sum, current) => sum + current.amount, 0);
 
-            console.log(monthTransInc);
+            // console.log(monthTransInc);
             item.inc = monthTransInc;
             balance -= monthTransInc;
             const monthTransDec = transactions
@@ -173,7 +173,7 @@ export function useAccountData(
               )
               .reduce((sum, current) => sum + current.amount, 0);
 
-            console.log(monthTransDec);
+            // console.log(monthTransDec);
             item.dec = monthTransDec;
             balance += monthTransDec;
           });

@@ -11,19 +11,40 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { typeMsg } from '../AccountPage';
 
 export function LoginPage() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isMsgOpen, setIsMsgOpen] = useState(false);
+  const [textMsg, setTextMsg] = useState('');
+  const [typeMsg, setTypeMsg] = useState<typeMsg>('success');
+  const [isLogInvalid, setLogIsInvalid] = useState(false);
+  const [isPassInvalid, setPassIsInvalid] = useState(false);
+
   const token = sessionStorage.getItem('auth');
 
   function handleLogin(e: ChangeEvent<HTMLInputElement>) {
     setLogin(e.target.value);
+    if (!e.target.value) {
+      setLogIsInvalid(false);
+    } else if (e.target.value.length < 6 || e.target.value.includes(' ')) {
+      setLogIsInvalid(true);
+    } else {
+      setLogIsInvalid(false);
+    }
   }
 
   function handlePassword(e: ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);
+    if (!e.target.value) {
+      setPassIsInvalid(false);
+    } else if (e.target.value.length < 6 || e.target.value.includes(' ')) {
+      setPassIsInvalid(true);
+    } else {
+      setPassIsInvalid(false);
+    }
   }
 
   function handleSubmit2(e: React.FormEvent) {
@@ -107,6 +128,10 @@ export function LoginPage() {
           <div className={styles.loginCont}>
             <span className={styles.spanLogPass}>Логин</span>
             <TextField
+              error={isLogInvalid}
+              helperText={
+                isLogInvalid && 'Логин д.б. > 6 символов и без пробелов '
+              }
               required
               id="outlined-basic2"
               label="Логин"
@@ -117,21 +142,36 @@ export function LoginPage() {
           </div>
           <div className={styles.passCont}>
             <span className={styles.spanLogPass}>Пароль</span>
-            {/* <TextField
+            <TextField
               required
-              id="outlined-basic2"
-              label="Пароль"
-              type="password"
+              id="outlined-basic3"
+              label="Пароль2"
+              // type="password"
               variant="outlined"
               onChange={handlePassword}
               sx={{ width: 300 }}
-            /> */}
+              type={showPassword ? 'text' : 'password'}
+            />
+            {/* <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+              DDD
+            </TextField> */}
 
             <FormControl sx={{ width: 300 }} variant="outlined" required>
               <InputLabel htmlFor="outlined-adornment-password">
                 Пароль
               </InputLabel>
               <OutlinedInput
+                error={isLogInvalid}
                 id="outlined-adornment-password"
                 onChange={handlePassword}
                 type={showPassword ? 'text' : 'password'}
@@ -148,7 +188,7 @@ export function LoginPage() {
                     </IconButton>
                   </InputAdornment>
                 }
-                label="Пароль"
+                label="Пароль1S"
               />
             </FormControl>
           </div>

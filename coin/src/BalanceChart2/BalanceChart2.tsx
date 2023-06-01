@@ -11,8 +11,9 @@ import {
   YAxis,
 } from 'recharts';
 import { IBalance } from '../AccountPage';
+import { IBalance2 } from '../hooks/useAccountData';
 
-export function BalanceChart2({ balanceArr }: { balanceArr: IBalance[] }) {
+export function BalanceChart2({ balanceArr }: { balanceArr: IBalance2[] }) {
   return (
     <ResponsiveContainer width={'99%'} height={165}>
       <BarChart

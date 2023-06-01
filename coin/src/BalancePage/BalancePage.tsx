@@ -5,7 +5,7 @@ import { Button, Paper } from '@mui/material';
 import TablePagination from '@mui/material/TablePagination';
 
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import { useAccountData } from '../hooks/useAccountData';
+import { IBalance2, useAccountData } from '../hooks/useAccountData';
 import { IAccount, ITransaction } from '../HomePage';
 import { IBalance } from '../AccountPage';
 import { BalanceChart1 } from '../BalanceChart1';
@@ -14,9 +14,9 @@ import { ContactSupport } from '@mui/icons-material';
 import { BalanceTable } from '../BalanceTable';
 
 export function BalancePage() {
-  const [accData, balanceArr, lastTrans] = useAccountData(12) as [
+  const [accData, balanceArr, lastTrans] = useAccountData(12, 0) as [
     IAccount,
-    IBalance[],
+    IBalance2[],
     ITransaction[]
   ];
   const [page, setPage] = useState(0);
@@ -80,7 +80,7 @@ export function BalancePage() {
         }}
       >
         <h2>Динамика баланса</h2>
-        <BalanceChart1 balanceArr={balanceArr} tickCount={4} />
+        <BalanceChart1 balanceArr={balanceArr} tickCount={3} />
       </Paper>
 
       <Paper
@@ -109,7 +109,7 @@ export function BalancePage() {
         <BalanceTable accData={accData} lastTrans={displayedTrans} />
         <TablePagination
           component="div"
-          count={98}
+          count={lastTrans.length}
           page={page}
           onPageChange={handlePagChange}
           rowsPerPage={rowsPerPage}

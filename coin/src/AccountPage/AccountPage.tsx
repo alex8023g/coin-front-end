@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './accountpage.module.css';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Paper, TextField } from '@mui/material';
+import { Autocomplete, Button, Paper, Stack, TextField } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { IAccount, ITransaction } from '../HomePage';
@@ -14,7 +14,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useAccountData } from '../hooks/useAccountData';
+import { IBalance2, useAccountData } from '../hooks/useAccountData';
 import { BalanceChart1 } from '../BalanceChart1';
 import { BalanceTable } from '../BalanceTable';
 import { produce } from 'immer';
@@ -35,13 +35,26 @@ interface ITransfer {
 export type typeMsg = 'success' | 'error';
 
 export function AccountPage() {
-  const token = sessionStorage.getItem('auth');
+  console.log('AccountPage()');
+  const token = useMemo(() => {
+    return sessionStorage.getItem('auth');
+  }, []);
 
-  const [accData, balanceArr, lastTrans] = useAccountData(6) as [
-    IAccount,
-    IBalance[],
-    ITransaction[]
-  ];
+  const toAccArr = useMemo(() => {
+    if (localStorage.getItem('coinToAccArr')) {
+      return JSON.parse(localStorage.getItem('coinToAccArr')!);
+    } else return [];
+  }, []);
+
+  const toAccArrRef = useRef<string[]>(toAccArr);
+  console.log(toAccArrRef.current);
+
+  const wasNewTransRef = useRef(1);
+
+  const [accData, balanceArr, lastTrans] = useAccountData(
+    6,
+    wasNewTransRef.current
+  ) as [IAccount, IBalance2[], ITransaction[]];
   const { account } = useParams();
   const [transferFunds, setTransferFunds] = useState<ITransfer>({
     from: account ?? '',
@@ -52,9 +65,15 @@ export function AccountPage() {
   const [textMsg, setTextMsg] = useState('');
   const [typeMsg, setTypeMsg] = useState<typeMsg>('success');
   const [isInvalid, setIsInvalid] = useState(false);
+
   function handleTransfer() {
-    console.log(transferFunds);
     if (!transferFunds.amount || !transferFunds.from || !transferFunds.to) {
+      console.log(
+        'return from handleTransfer',
+        transferFunds.amount,
+        transferFunds.from,
+        transferFunds.to
+      );
       return;
     }
     fetch(process.env.REACT_APP_API_SERVER + '/transfer-funds', {
@@ -73,12 +92,23 @@ export function AccountPage() {
           console.log(payload);
           setTypeMsg('success');
           setTextMsg('Перевод успешно выполнен');
+          setTransferFunds({ ...transferFunds, to: '', amount: '' });
+          if (!toAccArrRef.current.includes(transferFunds.to)) {
+            toAccArrRef.current.push(transferFunds.to);
+            localStorage.setItem(
+              'coinToAccArr',
+              JSON.stringify(toAccArrRef.current)
+            );
+          }
+          ++wasNewTransRef.current;
         } else {
           setTypeMsg('error');
           setTextMsg(error);
         }
       });
   }
+
+  const autocompleteList = ['1', '2', '3', '4'];
 
   return (
     <>
@@ -117,7 +147,40 @@ export function AccountPage() {
           <h2>Новый перевод</h2>
           <div className={styles.newRemittanceCont}>
             <div className={styles.textFieldCont}>
-              <TextField
+              <Autocomplete
+                freeSolo
+                disablePortal
+                id="combo-box-demo"
+                options={toAccArrRef.current}
+                sx={{ width: 300 }}
+                value={transferFunds.to}
+                onChange={(event: any, newValue: string | null) => {
+                  // setValue(newValue);
+                  setTransferFunds(
+                    produce((draft) => {
+                      draft.to = newValue || '';
+                    })
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    id="outlined-basic3"
+                    label="Номер счета получателя"
+                    variant="outlined"
+                    sx={{ marginBottom: '25px', width: 300 }}
+                    value={transferFunds.to}
+                    onChange={(e) => {
+                      setTransferFunds(
+                        produce((draft) => {
+                          draft.to = e.target.value;
+                        })
+                      );
+                    }}
+                  />
+                )}
+              />
+              {/* <TextField
                 id="outlined-basic2"
                 label="Номер счета получателя"
                 variant="outlined"
@@ -130,7 +193,7 @@ export function AccountPage() {
                     })
                   );
                 }}
-              />
+              /> */}
               <TextField
                 error={isInvalid}
                 helperText={isInvalid && 'Сумма указана некорректно'}
@@ -199,7 +262,7 @@ export function AccountPage() {
         >
           <h2>История переводов</h2>
           {/* <div>{accData.transactions[0].date.split('-')[1]}</div> */}
-          <BalanceTable accData={accData} lastTrans={lastTrans.slice(-10)} />
+          <BalanceTable accData={accData} lastTrans={lastTrans.slice(0, 10)} />
         </Paper>
       </Link>
       <Message

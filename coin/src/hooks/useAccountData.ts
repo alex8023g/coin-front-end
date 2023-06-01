@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { IAccount, ITransaction } from '../HomePage';
 import { useParams } from 'react-router-dom';
 
-interface IBalance {
+export interface IBalance2 {
   balanceMonth: number;
   inc: number;
   dec: number;
@@ -16,7 +16,8 @@ function getMonthNum(str: string) {
 }
 
 export function useAccountData(
-  monthAmount: number
+  monthAmount: number,
+  refetch: number
   // transAmount: number
 ) {
   const [accData, setAccData] = useState<IAccount>({
@@ -25,7 +26,7 @@ export function useAccountData(
     mine: true,
     transactions: [{ amount: 0, date: '', from: '', to: '' }],
   });
-  const [balanceArr, setBalanceArr] = useState<IBalance[]>([]);
+  const [balanceArr, setBalanceArr] = useState<IBalance2[]>([]);
   const [lastTrans, setLastTrans] = useState<ITransaction[]>([]);
   const { account } = useParams();
   // console.log(window.location.href.split('/').at(-1));
@@ -49,7 +50,7 @@ export function useAccountData(
 
   const monthNow = new Date().getMonth();
   const yearNow = new Date().getFullYear();
-  const balanceArrTemp: IBalance[] = [];
+  const balanceArrTemp: IBalance2[] = [];
 
   for (let i = 0; i < monthAmount; i++) {
     let monthNum = monthNow - i < 0 ? monthNow - i + 12 : monthNow - i;
@@ -183,7 +184,8 @@ export function useAccountData(
           setBalanceArr(balanceArrTemp.slice().reverse());
         }
       );
-  }, [token]);
+    console.log('useAccountData UseEffect');
+  }, [token, refetch]);
   console.log(accData, balanceArr, lastTrans);
   return [accData, balanceArr, lastTrans];
 }

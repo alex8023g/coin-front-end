@@ -24,12 +24,13 @@ export function BalanceTable({
           </tr>
         </thead>
         <tbody>
-          {lastTrans.slice(0, 100).map(
+          {lastTrans.map(
+            // {lastTrans.slice(0, 100).map(
             (trans, i) => (
               // {
               // if (trans.from === accData.account) {
               // return
-              <tr key={i} className={styles.tr}>
+              <tr key={trans.date} className={styles.tr}>
                 <td>{trans.from}</td>
                 <td>{trans.to}</td>
                 <td
@@ -39,7 +40,8 @@ export function BalanceTable({
                       : styles.colorGreen
                   }
                 >
-                  - {trans.amount} ₽
+                  {trans.from === accData.account ? '-' : ''}
+                  {trans.amount} ₽
                 </td>
                 <td>
                   {trans.date.slice(0, 10).split('-').reverse().join('.')}

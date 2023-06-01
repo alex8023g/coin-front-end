@@ -161,7 +161,7 @@ export function CurrencyPage() {
             <h2>Ваши валюты</h2>
             <ul>
               {currencies.map((currency) => (
-                <li key={nanoid()}>
+                <li key={nanoid()} className={styles.li}>
                   {currency.code}
                   <span className={styles.spanDotsBlack}></span>
                   {currency.amount}
@@ -282,7 +282,7 @@ export function CurrencyPage() {
           <ul>
             {currencyFeed?.map((curFeed) =>
               curFeed.change > 0 ? (
-                <li key={nanoid()}>
+                <li className={styles.li} key={nanoid()}>
                   {curFeed.from}/{curFeed.to}
                   <span className={styles.spanDotsGreen}></span>
                   {curFeed.rate}
@@ -291,7 +291,10 @@ export function CurrencyPage() {
                   </div>
                 </li>
               ) : (
-                <li key={nanoid()} className={styles.liCurFlow}>
+                <li
+                  key={nanoid()}
+                  className={styles.liCurFlow + ' ' + styles.li}
+                >
                   {curFeed.from}/{curFeed.to}
                   <span className={styles.spanDotsRed}></span>
                   {curFeed.rate}

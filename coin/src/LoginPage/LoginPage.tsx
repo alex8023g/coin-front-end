@@ -12,6 +12,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { typeMsg } from '../AccountPage';
+import FormHelperText from '@mui/material/FormHelperText';
+import { Message } from '../Message';
 
 export function LoginPage() {
   const [login, setLogin] = useState('');
@@ -64,15 +66,16 @@ export function LoginPage() {
       body: JSON.stringify({ login, password }),
     })
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.error) {
-          console.log(res.error);
+      .then(({ payload, error }) => {
+        console.log(payload, error);
+        if (error) {
+          console.log(error);
+          setIsMsgOpen(true);
+          setTypeMsg('error');
+          setTextMsg(error);
           return;
         }
-        const {
-          payload: { token },
-        } = res;
+        const { token } = payload;
         console.log(token);
         // setIsUser(true);
         // if (token) {
@@ -117,7 +120,7 @@ export function LoginPage() {
           sx={{
             padding: '50px 85px 50px 40px',
             // width: 500,
-            height: '280px',
+            // height: '280px',
             // flexBasis: 500,
             borderRadius: 9,
             backgroundColor: '#F3F4F6',
@@ -130,7 +133,7 @@ export function LoginPage() {
             <TextField
               error={isLogInvalid}
               helperText={
-                isLogInvalid && 'Логин д.б. > 6 символов и без пробелов '
+                isLogInvalid ? 'Пароль д.б. > 6 символов и без пробелов' : ' '
               }
               required
               id="outlined-basic2"
@@ -142,36 +145,16 @@ export function LoginPage() {
           </div>
           <div className={styles.passCont}>
             <span className={styles.spanLogPass}>Пароль</span>
-            <TextField
-              required
-              id="outlined-basic3"
-              label="Пароль2"
-              // type="password"
-              variant="outlined"
-              onChange={handlePassword}
-              sx={{ width: 300 }}
-              type={showPassword ? 'text' : 'password'}
-            />
-            {/* <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => {
-                    setShowPassword(!showPassword);
-                  }}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-              DDD
-            </TextField> */}
 
             <FormControl sx={{ width: 300 }} variant="outlined" required>
-              <InputLabel htmlFor="outlined-adornment-password">
+              <InputLabel
+                error={isPassInvalid}
+                htmlFor="outlined-adornment-password"
+              >
                 Пароль
               </InputLabel>
               <OutlinedInput
-                error={isLogInvalid}
+                error={isPassInvalid}
                 id="outlined-adornment-password"
                 onChange={handlePassword}
                 type={showPassword ? 'text' : 'password'}
@@ -188,8 +171,15 @@ export function LoginPage() {
                     </IconButton>
                   </InputAdornment>
                 }
-                label="Пароль1S"
+                label="Пароль"
               />
+              {/* { ( */}
+              <FormHelperText error>
+                {isPassInvalid
+                  ? 'Пароль д.б. > 6 символов и без пробелов'
+                  : ' '}
+              </FormHelperText>
+              {/* )} */}
             </FormControl>
           </div>
 
@@ -202,6 +192,12 @@ export function LoginPage() {
           </Button>
         </Paper>
       </Box>
+      <Message
+        isMsgOpen={isMsgOpen}
+        setIsMsgOpen={setIsMsgOpen}
+        textMsg={textMsg}
+        typeMsg={typeMsg}
+      />
     </>
   );
 }

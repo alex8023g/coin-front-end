@@ -136,7 +136,7 @@ export function LoginPage() {
                 isLogInvalid ? 'Пароль д.б. > 6 символов и без пробелов' : ' '
               }
               required
-              id="outlined-basic2"
+              id="login"
               label="Логин"
               variant="outlined"
               onChange={handleLogin}

@@ -1,18 +1,19 @@
 .header {
   /* width: 1440px; */
   height: 100px;
-  margin-bottom: 44px;
+  /* margin-bottom: 44px; */
   background-color: #116acc;
 }
 
 .container {
+  box-sizing: border-box;
   display: flex;
+  justify-content: space-between;
   height: 100%;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 50px;
   align-items: center;
-  justify-content: space-between;
-  max-width: 1440px;
 }
 
 .title {

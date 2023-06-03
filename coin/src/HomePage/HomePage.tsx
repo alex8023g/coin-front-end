@@ -100,6 +100,7 @@ export function HomePage() {
           <FormControl sx={{ width: 300 }}>
             <InputLabel id="select-label">Сортировка</InputLabel>
             <Select
+              size="small"
               labelId="select-label"
               // id="select-label"
               value={sortType}
@@ -125,11 +126,12 @@ export function HomePage() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
-          // flexWrap: 'wrap',
-          // justifyContent: 'space-around',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(370px, 1fr))',
           gridColumnGap: '2vw',
           gridRowGap: '50px',
+          justifyItems: 'normal',
+          // flexWrap: 'wrap',
+          // justifyContent: 'space-around',
         }}
       >
         {accounts &&

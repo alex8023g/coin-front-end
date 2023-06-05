@@ -12,6 +12,7 @@ export function AccountCard({ accountData }: { accountData: IAccount }) {
     .join('.');
   return (
     <Paper
+      className="accCard"
       sx={{
         // width: 380,
         maxWidth: 480,
@@ -21,8 +22,12 @@ export function AccountCard({ accountData }: { accountData: IAccount }) {
       }}
       elevation={9}
     >
-      <div className={styles.accountNumber}>{accountData.account}</div>
-      <div className={styles.accountBalance}>{accountData.balance + ' ₽'}</div>
+      <div className={styles.accountNumber + ' accNumber'}>
+        {accountData.account}
+      </div>
+      <div className={styles.accountBalance + ' accBalance'}>
+        {accountData.balance + ' ₽'}
+      </div>
       <div className={styles.bottomWrap}>
         <div className={styles.lastTrans}>
           <div>Последняя транзакция</div>

@@ -21,7 +21,7 @@ export function BalanceChart2({ balanceArr }: { balanceArr: IBalance2[] }) {
         // height={165}
         // data={data}
         data={balanceArr}
-        margin={{ right: 30 }}
+        margin={{ right: 60 }}
       >
         <CartesianGrid
           // vertical={false}
@@ -35,10 +35,12 @@ export function BalanceChart2({ balanceArr }: { balanceArr: IBalance2[] }) {
         <XAxis dataKey="monthStr" tickLine={false} />
         <YAxis
           orientation="right"
-          tickCount={3}
+          // tickCount={3}
           tickLine={false}
           unit={'₽'}
           tick={{ fontSize: 16 }}
+          // domain={[10000, 1500000, 12000000]}
+          ticks={[1000000, 7000000, 12000000]}
         />
         <Tooltip />
         <Bar dataKey="dec" stackId="a" fill="#FD4E5D" />

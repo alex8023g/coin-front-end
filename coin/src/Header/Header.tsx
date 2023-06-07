@@ -1,38 +1,28 @@
 import React from 'react';
 import styles from './header.module.css';
 import { Layout } from '../Layout';
-import { Button, Link } from '@mui/material';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <span className={styles.title}>Coin.</span>
+        {/* <span className={styles.title}>Coin.</span> */}
+        <Link className={styles.title} to="/">
+          Coin.
+        </Link>
         <div>
-          <button
-            className={styles.navBtn}
-            onClick={() => {
-              window.location.replace('/atm');
-            }}
-          >
+          <Link className={styles.navBtn} to="/atm">
             Банкоматы
-          </button>
-          <button
-            className={styles.navBtn}
-            onClick={() => {
-              window.location.replace('/');
-            }}
-          >
+          </Link>
+
+          <Link className={styles.navBtn} to="/">
             Счета
-          </button>
-          <button
-            className={styles.navBtn}
-            onClick={() => {
-              window.location.replace('/currency');
-            }}
-          >
+          </Link>
+          <Link className={styles.navBtn} to="/currency">
             Валюта
-          </button>
+          </Link>
           <button
             className={styles.navBtn}
             onClick={() => {

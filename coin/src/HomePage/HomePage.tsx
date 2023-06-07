@@ -8,7 +8,6 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
   SelectChangeEvent,
 } from '@mui/material';
@@ -56,7 +55,6 @@ export function HomePage() {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Basic ${token}`,
       },
-      // body: JSON.stringify({ login, password }),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -70,19 +68,20 @@ export function HomePage() {
       });
   }
 
-  // function sortBy(e: SelectChangeEvent) {
   function sortBy({ target: { value } }: SelectChangeEvent) {
     console.log(value);
-    // console.log(e.target.value);
     setSortType(value);
     setAccounts((accounts) => {
+      const accountsMod = structuredClone(accounts);
       switch (value) {
         case 'account':
-          return accounts?.sort((a, b) => a.account.localeCompare(b.account));
+          return [...accountsMod]?.sort((a, b) =>
+            a.account.localeCompare(b.account)
+          );
         case 'balance':
-          return accounts?.sort((a, b) => b.balance - a.balance);
+          return [...accountsMod]?.sort((a, b) => b.balance - a.balance);
         case 'lastTransDate':
-          return accounts?.sort(
+          return [...accountsMod]?.sort(
             (a, b) =>
               (new Date(b.transactions[0]?.date).getTime() || 0) -
               (new Date(a.transactions[0]?.date).getTime() || 0)
@@ -97,12 +96,13 @@ export function HomePage() {
       {token && (
         <div className={styles.firstLine}>
           <h1 className={styles.title}>Ваши счета</h1>
-          <FormControl sx={{ width: 300 }}>
-            <InputLabel id="select-label">Сортировка</InputLabel>
+          <FormControl sx={{ width: 270 }}>
+            <InputLabel id="select-label" size="small">
+              Сортировка
+            </InputLabel>
             <Select
               size="small"
               labelId="select-label"
-              // id="select-label"
               value={sortType}
               label="Сортировка"
               onChange={sortBy}

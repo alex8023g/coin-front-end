@@ -13,6 +13,8 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { AccountCard } from '../AccountCard';
+import { getAccounts } from '../api/getAccounts';
+import { createAccountApi } from '../api/createAccountApi';
 
 export interface IAccount {
   account: string;
@@ -34,38 +36,36 @@ export function HomePage() {
   const token = sessionStorage.getItem('auth');
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_SERVER + '/accounts', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Basic ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        setAccounts(res.payload);
-      });
+    // fetch(process.env.REACT_APP_API_SERVER + '/accounts', {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //     Authorization: `Basic ${token}`,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    getAccounts().then(({ payload }) => {
+      setAccounts(payload);
+    });
   }, [token]);
 
   function createAccount() {
-    fetch(process.env.REACT_APP_API_SERVER + '/create-account', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Basic ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        if (res.payload)
-          setAccounts(
-            produce((draft) => {
-              draft?.push(res.payload);
-            })
-          );
-      });
+    // fetch(process.env.REACT_APP_API_SERVER + '/create-account', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //     Authorization: `Basic ${token}`,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    createAccountApi().then(({ payload, error }) => {
+      if (payload)
+        setAccounts(
+          produce((draft) => {
+            draft?.push(payload);
+          })
+        );
+    });
   }
 
   function sortBy({ target: { value } }: SelectChangeEvent) {

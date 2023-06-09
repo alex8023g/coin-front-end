@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IAccount, ITransaction } from '../HomePage';
 import { useParams } from 'react-router-dom';
+import { getAccountData } from '../api/getAccountData';
 
 export interface IBalance2 {
   balanceMonth: number;
@@ -71,26 +72,25 @@ export function useAccountData(
   // setBalanceArr(balanceArr2);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_SERVER + '/account/' + account, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Basic ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(
-        ({
-          payload: { account, balance, mine, transactions },
-        }: {
-          payload: IAccount;
-        }) => {
-          // console.log(account, balance, mine, transactions);
-          setAccData({ account, balance, mine, transactions });
-          setLastTrans(transactions.slice().reverse());
+    // fetch(process.env.REACT_APP_API_SERVER + '/account/' + account, {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //     Authorization: `Basic ${token}`,
+    //   },
+    // }).then((res) => res.json());
+    getAccountData(account || '').then(
+      ({
+        payload: { account, balance, mine, transactions },
+      }: {
+        payload: IAccount;
+      }) => {
+        // console.log(account, balance, mine, transactions);
+        setAccData({ account, balance, mine, transactions });
+        setLastTrans(transactions.slice().reverse());
 
-          // тестовые транзакции начало
-          /*/
+        // тестовые транзакции начало
+        /*/
           transactions = [
             {
               amount: 1000000,
@@ -150,40 +150,40 @@ export function useAccountData(
           setLastTrans(transactions.slice().reverse());
           // конец тестовые транзакции
           //*/
-          balanceArrTemp.forEach((item, index) => {
-            item.balanceMonth = balance;
+        balanceArrTemp.forEach((item, index) => {
+          item.balanceMonth = balance;
 
-            const monthTransInc = transactions
-              .filter(
-                (trans) =>
-                  new Date(trans.date).getFullYear() === item.year &&
-                  new Date(trans.date).getMonth() === item.monthNum &&
-                  trans.to === account
-              )
-              .reduce((sum, current) => sum + current.amount, 0);
+          const monthTransInc = transactions
+            .filter(
+              (trans) =>
+                new Date(trans.date).getFullYear() === item.year &&
+                new Date(trans.date).getMonth() === item.monthNum &&
+                trans.to === account
+            )
+            .reduce((sum, current) => sum + current.amount, 0);
 
-            // console.log(monthTransInc);
-            item.inc = monthTransInc;
-            balance -= monthTransInc;
-            const monthTransDec = transactions
-              .filter(
-                (trans) =>
-                  new Date(trans.date).getFullYear() === item.year &&
-                  new Date(trans.date).getMonth() === item.monthNum &&
-                  trans.from === account
-              )
-              .reduce((sum, current) => sum + current.amount, 0);
+          // console.log(monthTransInc);
+          item.inc = monthTransInc;
+          balance -= monthTransInc;
+          const monthTransDec = transactions
+            .filter(
+              (trans) =>
+                new Date(trans.date).getFullYear() === item.year &&
+                new Date(trans.date).getMonth() === item.monthNum &&
+                trans.from === account
+            )
+            .reduce((sum, current) => sum + current.amount, 0);
 
-            // console.log(monthTransDec);
-            item.dec = monthTransDec;
-            balance += monthTransDec;
-          });
+          // console.log(monthTransDec);
+          item.dec = monthTransDec;
+          balance += monthTransDec;
+        });
 
-          // const balanceArrTempCopy = structuredClone(balanceArrTemp).reverse();
-          // setBalanceArr(balanceArrTempCopy);
-          setBalanceArr(balanceArrTemp.slice().reverse());
-        }
-      );
+        // const balanceArrTempCopy = structuredClone(balanceArrTemp).reverse();
+        // setBalanceArr(balanceArrTempCopy);
+        setBalanceArr(balanceArrTemp.slice().reverse());
+      }
+    );
     console.log('useAccountData UseEffect');
   }, [token, refetch]);
   console.log(accData, balanceArr, lastTrans);

@@ -8,6 +8,7 @@ import {
   Placemark,
 } from '@pbe/react-yandex-maps';
 import { Navigate } from 'react-router-dom';
+import { getBanks } from '../api/getBanks';
 
 interface IPayloadItem {
   lat: number;
@@ -19,20 +20,20 @@ export function AtmPage() {
   const [coordArr, setCoordArr] = useState<Array<number>[]>([[]]);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_SERVER + '/banks', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Basic ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        const { payload }: { payload: IPayloadItem[] } = res;
-        // const coordArr = payload.map((item) => Object.values(item));
-        setCoordArr(payload.map((item) => Object.values(item)));
-        console.log(res, coordArr);
-      });
+    // fetch(process.env.REACT_APP_API_SERVER + '/banks', {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //     Authorization: `Basic ${token}`,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    getBanks().then(({ payload }: { payload: IPayloadItem[] }) => {
+      // const { payload }: { payload: IPayloadItem[] } = res;
+      // const coordArr = payload.map((item) => Object.values(item));
+      setCoordArr(payload.map((item) => Object.values(item)));
+      // console.log(res, coordArr);
+    });
   }, [token]);
   return (
     <>

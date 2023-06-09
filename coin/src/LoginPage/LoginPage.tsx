@@ -14,6 +14,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { typeMsg } from '../AccountPage';
 import FormHelperText from '@mui/material/FormHelperText';
 import { Message } from '../Message';
+import { loginApi } from '../api/loginApi';
 
 export function LoginPage() {
   const [login, setLogin] = useState('');
@@ -58,32 +59,32 @@ export function LoginPage() {
     e.preventDefault();
     console.log('submit', process.env.REACT_APP_API_SERVER);
     // if (!process.env.REACT_APP_API_SERVER) return;
-    fetch(process.env.REACT_APP_API_SERVER + '/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify({ login, password }),
-    })
-      .then((res) => res.json())
-      .then(({ payload, error }) => {
-        console.log(payload, error);
-        if (error) {
-          console.log(error);
-          setIsMsgOpen(true);
-          setTypeMsg('error');
-          setTextMsg(error);
-          return;
-        }
-        const { token } = payload;
-        console.log(token);
-        // setIsUser(true);
-        // if (token) {
-        sessionStorage.setItem('auth', token);
-        window.location.replace('/');
-        // router.push('/');
-        // }
-      });
+    // fetch(process.env.REACT_APP_API_SERVER + '/login', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //   },
+    //   body: JSON.stringify({ login, password }),
+    // })
+    //   .then((res) => res.json())
+    loginApi(login, password).then(({ payload, error }) => {
+      console.log(payload, error);
+      if (error) {
+        console.log(error);
+        setIsMsgOpen(true);
+        setTypeMsg('error');
+        setTextMsg(error);
+        return;
+      }
+      const { token } = payload;
+      console.log(token);
+      // setIsUser(true);
+      // if (token) {
+      sessionStorage.setItem('auth', token);
+      window.location.replace('/');
+      // router.push('/');
+      // }
+    });
   }
 
   return (

@@ -21,6 +21,8 @@ import { nanoid } from 'nanoid';
 import { Navigate } from 'react-router-dom';
 import { Message } from '../Message';
 import { typeMsg } from '../AccountPage';
+import { getCurrencies } from '../api/getCurrencies';
+import { currencyBuy } from '../api/currencyBuy';
 
 interface ICurrency {
   amount: number;
@@ -97,48 +99,48 @@ export function CurrencyPage() {
   }, []);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_SERVER + '/currencies', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Basic ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        const { payload } = res;
-        const currArr: ICurrency[] = Object.values(payload);
-        setCurrencies(currArr);
-        setExchange({ from: currArr[0].code, to: currArr[1].code, amount: '' });
-        console.log(currArr, currencies);
-      });
+    // fetch(process.env.REACT_APP_API_SERVER + '/currencies', {
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //     Authorization: `Basic ${token}`,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    getCurrencies().then(({ payload }) => {
+      // const { payload } = res;
+      const currArr: ICurrency[] = Object.values(payload);
+      setCurrencies(currArr);
+      setExchange({ from: currArr[0].code, to: currArr[1].code, amount: '' });
+      console.log(currArr, currencies);
+    });
   }, [token, updateCurrencies.current]);
 
   function handleExchange() {
     console.log(exchange);
     if (isInvalid) return;
-    fetch(process.env.REACT_APP_API_SERVER + '/currency-buy', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Basic ${token}`,
-      },
-      body: JSON.stringify(exchange),
-    })
-      .then((res) => res.json())
-      .then(({ payload, error }) => {
-        console.log(payload, error);
-        setIsMsgOpen(true);
-        if (payload) {
-          console.log(payload);
-          setTypeMsg('success');
-          setTextMsg('Обмен успешно выполнен');
-        } else {
-          setTypeMsg('error');
-          setTextMsg(error);
-        }
-        updateCurrencies.current++;
-      });
+    // fetch(process.env.REACT_APP_API_SERVER + '/currency-buy', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //     Authorization: `Basic ${token}`,
+    //   },
+    //   body: JSON.stringify(exchange),
+    // })
+    //   .then((res) => res.json())
+    currencyBuy(exchange).then(({ payload, error }) => {
+      console.log(payload, error);
+      setIsMsgOpen(true);
+      if (payload) {
+        console.log(payload);
+        setTypeMsg('success');
+        setTextMsg('Обмен успешно выполнен');
+      } else {
+        setTypeMsg('error');
+        setTextMsg(error);
+      }
+      updateCurrencies.current++;
+    });
   }
 
   return (

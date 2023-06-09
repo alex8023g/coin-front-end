@@ -19,6 +19,7 @@ import { BalanceChart1 } from '../BalanceChart1';
 import { BalanceTable } from '../BalanceTable';
 import { produce } from 'immer';
 import { Message } from '../Message';
+import { transferFundsApi } from '../api/transferFundsApi';
 
 export interface IBalance {
   amount: number;
@@ -76,36 +77,36 @@ export function AccountPage() {
       );
       return;
     }
-    fetch(process.env.REACT_APP_API_SERVER + '/transfer-funds', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Basic ${token}`,
-      },
-      body: JSON.stringify(transferFunds),
-    })
-      .then((res) => res.json())
-      .then(({ payload, error }) => {
-        console.log(payload, error);
-        setIsMsgOpen(true);
-        if (payload) {
-          console.log(payload);
-          setTypeMsg('success');
-          setTextMsg('Перевод успешно выполнен');
-          setTransferFunds({ ...transferFunds, to: '', amount: '' });
-          if (!toAccArrRef.current.includes(transferFunds.to)) {
-            toAccArrRef.current.push(transferFunds.to);
-            localStorage.setItem(
-              'coinToAccArr',
-              JSON.stringify(toAccArrRef.current)
-            );
-          }
-          ++wasNewTransRef.current;
-        } else {
-          setTypeMsg('error');
-          setTextMsg(error);
+    // fetch(process.env.REACT_APP_API_SERVER + '/transfer-funds', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //     Authorization: `Basic ${token}`,
+    //   },
+    //   body: JSON.stringify(transferFunds),
+    // })
+    //   .then((res) => res.json())
+    transferFundsApi(transferFunds).then(({ payload, error }) => {
+      console.log(payload, error);
+      setIsMsgOpen(true);
+      if (payload) {
+        console.log(payload);
+        setTypeMsg('success');
+        setTextMsg('Перевод успешно выполнен');
+        setTransferFunds({ ...transferFunds, to: '', amount: '' });
+        if (!toAccArrRef.current.includes(transferFunds.to)) {
+          toAccArrRef.current.push(transferFunds.to);
+          localStorage.setItem(
+            'coinToAccArr',
+            JSON.stringify(toAccArrRef.current)
+          );
         }
-      });
+        ++wasNewTransRef.current;
+      } else {
+        setTypeMsg('error');
+        setTextMsg(error);
+      }
+    });
   }
 
   const autocompleteList = ['1', '2', '3', '4'];

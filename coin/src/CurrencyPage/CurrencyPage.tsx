@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import styles from './currencypage.module.css';
 import {
   Box,
@@ -29,6 +29,7 @@ interface ICurrency {
   code: string;
 }
 interface ICurrencyFeed {
+  id: string;
   type: string;
   from: string;
   to: string;
@@ -63,6 +64,7 @@ export function CurrencyPage() {
     let socket = new WebSocket(process.env.REACT_APP_API_WS + '/currency-feed');
     socket.onmessage = function (e) {
       const data = JSON.parse(e.data);
+      data.id = nanoid();
       setCurrencyFeed(
         produce((draft) => {
           // console.log(`[message] Данные получены с сервера: ${e.data}`);
@@ -150,7 +152,7 @@ export function CurrencyPage() {
       <Box
         sx={{
           display: 'flex',
-          flexWrap: 'wrap',
+          // flexWrap: 'wrap',
           justifyContent: 'space-around',
           gap: 3,
         }}
@@ -166,7 +168,7 @@ export function CurrencyPage() {
                 <li key={nanoid()} className={styles.li}>
                   {currency.code}
                   <span className={styles.spanDotsBlack}></span>
-                  {currency.amount}
+                  {currency.amount.toLocaleString()}
                 </li>
               ))}
             </ul>
@@ -174,7 +176,7 @@ export function CurrencyPage() {
 
           <Paper
             elevation={7}
-            sx={{ marginBottom: 4, width: 540, padding: 5, borderRadius: 9 }}
+            sx={{ marginBottom: 0, width: 540, padding: 5, borderRadius: 9 }}
           >
             <h2>Обмен валюты</h2>
 
@@ -284,7 +286,7 @@ export function CurrencyPage() {
           <ul>
             {currencyFeed?.map((curFeed) =>
               curFeed.change > 0 ? (
-                <li className={styles.li} key={nanoid()}>
+                <li className={styles.li} key={curFeed.id}>
                   {curFeed.from}/{curFeed.to}
                   <span className={styles.spanDotsGreen}></span>
                   {curFeed.rate}
@@ -293,10 +295,7 @@ export function CurrencyPage() {
                   </div>
                 </li>
               ) : (
-                <li
-                  key={nanoid()}
-                  className={styles.liCurFlow + ' ' + styles.li}
-                >
+                <li key={curFeed.id} className={styles.li}>
                   {curFeed.from}/{curFeed.to}
                   <span className={styles.spanDotsRed}></span>
                   {curFeed.rate}

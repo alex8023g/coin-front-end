@@ -1,8 +1,12 @@
 .accountNumber {
+  font-size: 18px;
+  font-weight: 500;
   margin-bottom: 9px;
 }
 
 .accountBalance {
+  font-size: 14px;
+  font-weight: 500;
   margin-bottom: 9px;
 }
 
@@ -11,6 +15,16 @@
   justify-content: space-between;
 }
 
-.lastTrans {
+.lastTransCont {
   margin-top: auto;
+}
+
+.lastTransText {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lastTransDate {
+  font-size: 13px;
+  font-weight: 400;
 }

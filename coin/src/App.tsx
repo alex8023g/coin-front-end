@@ -10,13 +10,15 @@ import { CurrencyPage } from './CurrencyPage';
 import { AtmPage } from './AtmPage';
 import { AccountPage } from './AccountPage';
 import { BalancePage } from './BalancePage';
+import { Header2 } from './Header2';
 
 function App() {
   const [isUser, setIsUser] = useState(false);
 
   return (
     <BrowserRouter>
-      <Header />
+      {/* <Header /> */}
+      <Header2 />
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />

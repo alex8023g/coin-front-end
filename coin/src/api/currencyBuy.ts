@@ -7,7 +7,7 @@ interface IExchange2 {
 export async function currencyBuy(exchange: IExchange2) {
   const token = sessionStorage.getItem('auth');
 
-  let res = await fetch(process.env.REACT_APP_API_SERVER + '/currency-buy', {
+  const res = await fetch(process.env.REACT_APP_API_SERVER + '/currency-buy', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',

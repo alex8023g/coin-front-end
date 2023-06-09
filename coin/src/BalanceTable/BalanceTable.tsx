@@ -15,7 +15,7 @@ export function BalanceTable({
       <table className={styles.table}>
         <thead className={styles.thead}>
           <tr>
-            <th className={styles.th + ' ' + styles.brLeft}>
+            <th className={styles.th + ' ' + styles.brLeft + ' ' + styles.pl}>
               Счет отправителя
             </th>
             <th className={styles.th}>Счет получателя</th>
@@ -31,7 +31,7 @@ export function BalanceTable({
               // if (trans.from === accData.account) {
               // return
               <tr key={trans.date} className={styles.tr}>
-                <td>{trans.from}</td>
+                <td className={styles.pl}>{trans.from}</td>
                 <td>{trans.to}</td>
                 <td
                   className={
@@ -41,7 +41,7 @@ export function BalanceTable({
                   }
                 >
                   {trans.from === accData.account ? '-' : ''}
-                  {trans.amount} ₽
+                  {trans.amount.toLocaleString()} ₽
                 </td>
                 <td>
                   {trans.date.slice(0, 10).split('-').reverse().join('.')}

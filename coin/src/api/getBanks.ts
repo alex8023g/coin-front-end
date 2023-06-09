@@ -1,7 +1,7 @@
 export async function getBanks() {
   const token = sessionStorage.getItem('auth');
 
-  let res = await fetch(process.env.REACT_APP_API_SERVER + '/banks', {
+  const res = await fetch(process.env.REACT_APP_API_SERVER + '/banks', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',

@@ -131,7 +131,9 @@ export function AccountPage() {
           </Link>
           <p>
             <span className={styles.spanBalance}>Баланс</span>
-            <span style={{ float: 'right' }}>{accData.balance} ₽</span>
+            <span style={{ float: 'right' }}>
+              {accData.balance.toLocaleString()} ₽
+            </span>
           </p>
         </div>
       </div>

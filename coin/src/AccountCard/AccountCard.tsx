@@ -5,11 +5,12 @@ import { IAccount } from '../HomePage';
 import { Link } from 'react-router-dom';
 
 export function AccountCard({ accountData }: { accountData: IAccount }) {
-  const LastTransDate = accountData.transactions[0]?.date
-    .split('T')[0]
-    .split('-')
-    .reverse()
-    .join('.');
+  const LastTransDate =
+    accountData.transactions[0]?.date
+      .split('T')[0]
+      .split('-')
+      .reverse()
+      .join('.') || '-';
   return (
     <Paper
       className="accCard"
@@ -26,12 +27,12 @@ export function AccountCard({ accountData }: { accountData: IAccount }) {
         {accountData.account}
       </div>
       <div className={styles.accountBalance + ' accBalance'}>
-        {accountData.balance + ' ₽'}
+        {accountData.balance.toLocaleString() + ' ₽'}
       </div>
       <div className={styles.bottomWrap}>
-        <div className={styles.lastTrans}>
-          <div>Последняя транзакция</div>
-          <div>{LastTransDate}</div>
+        <div className={styles.lastTransCont}>
+          <div className={styles.lastTransText}>Последняя транзакция</div>
+          <div className={styles.lastTransDate}>{LastTransDate}</div>
         </div>
         <Link to={'account/' + accountData.account}>
           <Button variant="contained" sx={{ height: 52, borderRadius: 2 }}>

@@ -16,6 +16,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { Message } from '../Message';
 import { loginApi } from '../api/loginApi';
 
+// sessionStorage.removeItem('auth');
+
 export function LoginPage() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -27,6 +29,9 @@ export function LoginPage() {
   const [isPassInvalid, setPassIsInvalid] = useState(false);
 
   const token = sessionStorage.getItem('auth');
+  if (token) {
+    sessionStorage.removeItem('auth');
+  }
 
   function handleLogin(e: ChangeEvent<HTMLInputElement>) {
     setLogin(e.target.value);

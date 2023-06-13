@@ -117,7 +117,12 @@ export function HomePage() {
           <Button
             variant="contained"
             onClick={createAccount}
-            sx={{ p: '14px 24px 14px 18px', float: 'right', borderRadius: 2 }}
+            sx={{
+              p: '14px 24px 14px 18px',
+              // float: 'right',
+              ml: { xs: 0, sm: 'auto' },
+              borderRadius: 2,
+            }}
           >
             <AddIcon sx={{ mr: 1 }} /> создать новый счет
           </Button>

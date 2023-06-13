@@ -76,7 +76,7 @@ export function CurrencyPage() {
           } else {
             draft.push(data);
           }
-          if (draft.length > 22) {
+          if (draft.length > 21) {
             draft.shift();
           }
         })
@@ -148,12 +148,12 @@ export function CurrencyPage() {
   return (
     <>
       {!token && <Navigate to="/login" />}
-      <h1>Валютный обмен</h1>
+      <h1 className={styles.h1}>Валютный обмен</h1>
       <Box
         sx={{
           display: 'flex',
-          // flexWrap: 'wrap',
-          justifyContent: 'space-around',
+          flexWrap: { xs: 'wrap', sm: 'wrap', md: 'nowrap' },
+          justifyContent: { sm: 'center', md: 'space-between' },
           gap: 3,
         }}
       >
@@ -162,7 +162,7 @@ export function CurrencyPage() {
             elevation={7}
             sx={{ marginBottom: 4, padding: 5, borderRadius: 9 }}
           >
-            <h2>Ваши валюты</h2>
+            <h2 className={styles.h2}>Ваши валюты</h2>
             <ul>
               {currencies.map((currency) => (
                 <li key={nanoid()} className={styles.li}>
@@ -178,7 +178,7 @@ export function CurrencyPage() {
             elevation={7}
             sx={{ marginBottom: 0, width: 540, padding: 5, borderRadius: 9 }}
           >
-            <h2>Обмен валюты</h2>
+            <h2 className={styles.h2}>Обмен валюты</h2>
 
             {currencies[0] && (
               <div className={styles.currChangeContainer}>
@@ -276,13 +276,14 @@ export function CurrencyPage() {
         <Paper
           elevation={7}
           sx={{
+            // minWidth: 500,
             width: 703,
             padding: 5,
             borderRadius: 9,
             backgroundColor: '#E5E5E5',
           }}
         >
-          <h2>Изменение курсов в реальном времени</h2>
+          <h2 className={styles.h2}>Изменение курсов в реальном времени</h2>
           <ul>
             {currencyFeed?.map((curFeed) =>
               curFeed.change > 0 ? (

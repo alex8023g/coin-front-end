@@ -1,8 +1,17 @@
 .firstLine {
+  display: flex;
+  flex-wrap: wrap;
   margin-bottom: 50px;
+  align-items: center;
+  /* outline: 1px solid coral; */
 }
 
 .title {
-  display: inline;
+  /* display: inline; */
   margin-right: 35px;
+}
+
+@media (max-width: 900px) {
+  .firstLine {
+  }
 }

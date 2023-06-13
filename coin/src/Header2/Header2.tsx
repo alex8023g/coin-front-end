@@ -14,6 +14,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import styles from './header2.module.css';
+import './style.css';
+import { Link } from 'react-router-dom';
 
 interface Props {
   /**
@@ -24,7 +26,12 @@ interface Props {
 }
 
 const drawerWidth = 240;
-const navItems = ['Банкоматы', 'Счета', 'Валюта', 'Выйти'];
+const navItems = [
+  { name: 'Банкоматы', href: '/atm' },
+  { name: 'Счета', href: '/' },
+  { name: 'Валюта', href: '/currency' },
+  { name: 'Выйти', href: '/login' },
+];
 
 export function Header2(props: Props) {
   // const { window } = props;
@@ -42,9 +49,11 @@ export function Header2(props: Props) {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.name} disablePadding>
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+              <Link className={styles.navBtn} to={item.href}>
+                <ListItemText primary={item.name} />
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
@@ -65,8 +74,9 @@ export function Header2(props: Props) {
         {/* <div className={styles.container}> */}
         <Toolbar
           sx={{
+            width: '1440px',
+            // height: { xs: '50px', sm: '100px' },
             height: '100px',
-            width: '1190px',
             justifyContent: 'space-between',
           }}
         >
@@ -88,9 +98,11 @@ export function Header2(props: Props) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
+              <Link className={styles.navBtn} to={item.href}>
+                <Button key={item.name} sx={{ color: '#fff' }} size="large">
+                  {item.name}
+                </Button>
+              </Link>
             ))}
           </Box>
         </Toolbar>

@@ -17,7 +17,11 @@
   padding-left: 16px;
 }
 
-h2 {
+.h1 {
+  margin-bottom: 40px;
+}
+
+.h2 {
   margin-bottom: 25px;
 }
 

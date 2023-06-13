@@ -36,28 +36,12 @@ export function HomePage() {
   const token = sessionStorage.getItem('auth');
 
   useEffect(() => {
-    // fetch(process.env.REACT_APP_API_SERVER + '/accounts', {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json;charset=utf-8',
-    //     Authorization: `Basic ${token}`,
-    //   },
-    // })
-    //   .then((res) => res.json())
     getAccounts().then(({ payload }) => {
       setAccounts(payload);
     });
   }, [token]);
 
   function createAccount() {
-    // fetch(process.env.REACT_APP_API_SERVER + '/create-account', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json;charset=utf-8',
-    //     Authorization: `Basic ${token}`,
-    //   },
-    // })
-    //   .then((res) => res.json())
     createAccountApi().then(({ payload, error }) => {
       if (payload)
         setAccounts(
@@ -135,8 +119,6 @@ export function HomePage() {
           gridColumnGap: '2vw',
           gridRowGap: '50px',
           justifyItems: 'normal',
-          // flexWrap: 'wrap',
-          // justifyContent: 'space-around',
         }}
       >
         {accounts &&

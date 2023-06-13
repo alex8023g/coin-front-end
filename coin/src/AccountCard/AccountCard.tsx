@@ -15,9 +15,7 @@ export function AccountCard({ accountData }: { accountData: IAccount }) {
     <Paper
       className="accCard"
       sx={{
-        // width: 380,
         maxWidth: 480,
-        // mb: 7,
         p: 2.2,
         borderRadius: 3,
       }}

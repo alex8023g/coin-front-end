@@ -61,9 +61,6 @@ export function Header2(props: Props) {
     </Box>
   );
 
-  // const container =
-  //   window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -71,11 +68,9 @@ export function Header2(props: Props) {
         component="nav"
         sx={{ flexDirection: 'row', justifyContent: 'center' }}
       >
-        {/* <div className={styles.container}> */}
         <Toolbar
           sx={{
             width: '1440px',
-            // height: { xs: '50px', sm: '100px' },
             height: '100px',
             justifyContent: 'space-between',
           }}
@@ -106,11 +101,9 @@ export function Header2(props: Props) {
             ))}
           </Box>
         </Toolbar>
-        {/* </div> */}
       </AppBar>
       <Box component="nav">
         <Drawer
-          // container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}

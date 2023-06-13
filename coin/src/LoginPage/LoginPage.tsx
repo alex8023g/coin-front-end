@@ -16,8 +16,6 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { Message } from '../Message';
 import { loginApi } from '../api/loginApi';
 
-// sessionStorage.removeItem('auth');
-
 export function LoginPage() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -62,16 +60,7 @@ export function LoginPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log('submit', process.env.REACT_APP_API_SERVER);
-    // if (!process.env.REACT_APP_API_SERVER) return;
-    // fetch(process.env.REACT_APP_API_SERVER + '/login', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json;charset=utf-8',
-    //   },
-    //   body: JSON.stringify({ login, password }),
-    // })
-    //   .then((res) => res.json())
+
     loginApi(login, password).then(({ payload, error }) => {
       console.log(payload, error);
       if (error) {
@@ -83,51 +72,28 @@ export function LoginPage() {
       }
       const { token } = payload;
       console.log(token);
-      // setIsUser(true);
-      // if (token) {
       sessionStorage.setItem('auth', token);
       window.location.replace('/');
-      // router.push('/');
-      // }
     });
   }
 
   return (
     <>
       {token && <Navigate to="/" />}
-      {/* <form className={styles.loginForm} onSubmit={handleSubmit}>
-        <h2 className={styles.h2}>Вход в аккаунт</h2>
-        <div>
-          Логин{' '}
-          <input id="login" type="text" onChange={handleLogin} value={login} />
-        </div>
-        <div>
-          Пароль{' '}
-          <input id="password" type="password" onChange={handlePassword} />
-        </div>
-        <button type="submit">Войти</button>
-      </form> */}
+
       <Box
         component="form"
-        // position="relative"
-        // top="20%"
         height="65vh"
         display="flex"
         justifyContent="center"
         alignItems="center"
-        // onSubmit={(e) => {
-        //   e.preventDefault();
-        //   console.log('submit');
-        // }}
         onSubmit={handleSubmit}
       >
         <Paper
           elevation={7}
           sx={{
             padding: '50px 85px 50px 40px',
-            // width: 500,
-            // height: '280px',
-            // flexBasis: 500,
+
             borderRadius: 9,
             backgroundColor: '#F3F4F6',
           }}
@@ -179,13 +145,11 @@ export function LoginPage() {
                 }
                 label="Пароль"
               />
-              {/* { ( */}
               <FormHelperText error>
                 {isPassInvalid
                   ? 'Пароль д.б. > 6 символов и без пробелов'
                   : ' '}
               </FormHelperText>
-              {/* )} */}
             </FormControl>
           </div>
 

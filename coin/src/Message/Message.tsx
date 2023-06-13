@@ -20,8 +20,6 @@ export function Message({
   textMsg: string;
   typeMsg: typeMsg;
 }) {
-  const [open, setOpen] = useState(false);
-
   const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;

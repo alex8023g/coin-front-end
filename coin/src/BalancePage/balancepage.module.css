@@ -1,8 +1,14 @@
 h1 {
   margin: 0;
 }
+
 .firstLineContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 34px;
+}
+
+.h2 {
+  margin-bottom: 25px;
 }

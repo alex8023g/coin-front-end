@@ -1,19 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './accountpage.module.css';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Autocomplete, Button, Paper, Stack, TextField } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { IAccount, ITransaction } from '../HomePage';
-import {
-  Bar,
-  BarChart,
-  CartesianAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from 'recharts';
 import { IBalance2, useAccountData } from '../hooks/useAccountData';
 import { BalanceChart1 } from '../BalanceChart1';
 import { BalanceTable } from '../BalanceTable';
@@ -36,6 +27,7 @@ interface ITransfer {
 export type typeMsg = 'success' | 'error';
 
 export function AccountPage() {
+  const navigate = useNavigate();
   console.log('AccountPage()');
   const token = useMemo(() => {
     return sessionStorage.getItem('auth');
@@ -77,15 +69,7 @@ export function AccountPage() {
       );
       return;
     }
-    // fetch(process.env.REACT_APP_API_SERVER + '/transfer-funds', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json;charset=utf-8',
-    //     Authorization: `Basic ${token}`,
-    //   },
-    //   body: JSON.stringify(transferFunds),
-    // })
-    //   .then((res) => res.json())
+
     transferFundsApi(transferFunds).then(({ payload, error }) => {
       console.log(payload, error);
       setIsMsgOpen(true);
@@ -115,14 +99,13 @@ export function AccountPage() {
     <>
       <div className={styles.firstLineContainer}>
         <div>
-          <h1 className={styles.title}>Просмотр счета</h1>
+          <h1 className={styles.h1}>Просмотр счета</h1>
           <p>№ {accData.account}</p>
         </div>
         <div>
           <Link to={'/'}>
             <Button
               variant="contained"
-              // onClick={createAccount}
               sx={{ p: '14px 24px 14px 18px', borderRadius: 2 }}
             >
               <KeyboardBackspaceIcon sx={{ mr: 1 }} />
@@ -142,12 +125,11 @@ export function AccountPage() {
           elevation={7}
           sx={{
             padding: '25px 50px',
-            // flexBasis: 500,
             borderRadius: 9,
             backgroundColor: '#F3F4F6',
           }}
         >
-          <h2>Новый перевод</h2>
+          <h2 className={styles.h2}>Новый перевод</h2>
           <div className={styles.newRemittanceCont}>
             <div className={styles.textFieldCont}>
               <Autocomplete
@@ -158,7 +140,6 @@ export function AccountPage() {
                 sx={{ width: 300 }}
                 value={transferFunds.to}
                 onChange={(event: any, newValue: string | null) => {
-                  // setValue(newValue);
                   setTransferFunds(
                     produce((draft) => {
                       draft.to = newValue || '';
@@ -183,20 +164,7 @@ export function AccountPage() {
                   />
                 )}
               />
-              {/* <TextField
-                id="outlined-basic2"
-                label="Номер счета получателя"
-                variant="outlined"
-                sx={{ marginBottom: '25px', width: 300 }}
-                value={transferFunds.to}
-                onChange={(e) => {
-                  setTransferFunds(
-                    produce((draft) => {
-                      draft.to = e.target.value;
-                    })
-                  );
-                }}
-              /> */}
+
               <TextField
                 error={isInvalid}
                 helperText={isInvalid && 'Сумма указана некорректно'}
@@ -234,25 +202,22 @@ export function AccountPage() {
             </Button>
           </div>
         </Paper>
-        {/* <Link to={'/balance/' + account}> */}
+
         <Paper
           onClick={() => {
-            window.location.replace(`/balance/${account}`);
+            navigate(`/balance/${account}`);
           }}
-          // onCkick={() => {}}
           elevation={7}
           sx={{
             padding: '25px 50px',
-            // width: '720px',
             flexBasis: '720px',
             borderRadius: 9,
             cursor: 'pointer',
           }}
         >
-          <h2>Динамика баланса</h2>
+          <h2 className={styles.h2}>Динамика баланса</h2>
           <BalanceChart1 balanceArr={balanceArr} tickCount={3} />
         </Paper>
-        {/* </Link> */}
       </div>
       <Link to={'/balance/' + account}>
         <Paper
@@ -263,8 +228,7 @@ export function AccountPage() {
             backgroundColor: '#F3F4F6',
           }}
         >
-          <h2>История переводов</h2>
-          {/* <div>{accData.transactions[0].date.split('-')[1]}</div> */}
+          <h2 className={styles.h2}>История переводов</h2>
           <BalanceTable accData={accData} lastTrans={lastTrans.slice(0, 10)} />
         </Paper>
       </Link>

@@ -3,16 +3,11 @@ import styles from './currencypage.module.css';
 import {
   Box,
   Button,
-  ClickAwayListener,
-  Divider,
   FormControl,
-  InputLabel,
   MenuItem,
   Paper,
   Select,
-  Stack,
   TextField,
-  dividerClasses,
 } from '@mui/material';
 import { produce } from 'immer';
 import { ReactComponent as ArrowUp } from '../assets/arrowup.svg';
@@ -46,7 +41,6 @@ export function CurrencyPage() {
   const token = sessionStorage.getItem('auth');
   const [currencies, setCurrencies] = useState<ICurrency[]>([]);
   const [currencyFeed, setCurrencyFeed] = useState<ICurrencyFeed[]>([]);
-  // const [sum, setSum] = useState('0');
   const [exchange, setExchange] = useState<IExchange>({
     from: '',
     to: '',
@@ -67,7 +61,6 @@ export function CurrencyPage() {
       data.id = nanoid();
       setCurrencyFeed(
         produce((draft) => {
-          // console.log(`[message] Данные получены с сервера: ${e.data}`);
           const index = draft.findIndex(
             (item) => item.from === data.from && item.to === data.to
           );
@@ -89,8 +82,6 @@ export function CurrencyPage() {
           `[close] Соединение закрыто чисто, код=${event.code} причина=${event.reason}`
         );
       } else {
-        // например, сервер убил процесс или сеть недоступна
-        // обычно в этом случае event.code 1006
         console.log('[close] Соединение прервано');
       }
     };
@@ -101,16 +92,7 @@ export function CurrencyPage() {
   }, []);
 
   useEffect(() => {
-    // fetch(process.env.REACT_APP_API_SERVER + '/currencies', {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json;charset=utf-8',
-    //     Authorization: `Basic ${token}`,
-    //   },
-    // })
-    //   .then((res) => res.json())
     getCurrencies().then(({ payload }) => {
-      // const { payload } = res;
       const currArr: ICurrency[] = Object.values(payload);
       setCurrencies(currArr);
       setExchange({ from: currArr[0].code, to: currArr[1].code, amount: '' });
@@ -121,15 +103,7 @@ export function CurrencyPage() {
   function handleExchange() {
     console.log(exchange);
     if (isInvalid) return;
-    // fetch(process.env.REACT_APP_API_SERVER + '/currency-buy', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json;charset=utf-8',
-    //     Authorization: `Basic ${token}`,
-    //   },
-    //   body: JSON.stringify(exchange),
-    // })
-    //   .then((res) => res.json())
+
     currencyBuy(exchange).then(({ payload, error }) => {
       console.log(payload, error);
       setIsMsgOpen(true);
@@ -186,14 +160,9 @@ export function CurrencyPage() {
                   <div className={styles.currChangeFromTo}>
                     <span className={styles.spanCurrChange}> Из </span>
                     <FormControl sx={{ mr: 2, flexGrow: 1 }}>
-                      {/* <InputLabel id="select-label">Сортировка</InputLabel> */}
-
                       <Select
                         labelId="select-label"
                         defaultValue={currencies[0].code}
-                        // id="select-label"
-                        // value={sortType}
-                        // label="Сортировка"
                         onChange={(e) =>
                           setExchange(
                             produce((draft) => {
@@ -211,14 +180,9 @@ export function CurrencyPage() {
                     </FormControl>
                     <span className={styles.spanCurrChange}> в </span>
                     <FormControl sx={{ flexGrow: 1 }}>
-                      {/* <InputLabel id="select-label">Сортировка</InputLabel> */}
-
                       <Select
                         labelId="select-label"
                         defaultValue={currencies[1].code}
-                        // id="select-label"
-                        // value={sortType}
-                        // label="Сортировка"
                         onChange={(e) =>
                           setExchange(
                             produce((draft) => {
@@ -241,12 +205,9 @@ export function CurrencyPage() {
                       error={isInvalid}
                       helperText={isInvalid && 'Сумма указана некорректно'}
                       id="outlined-controlled"
-                      // label="Controlled"
                       sx={{ flexGrow: 1 }}
                       value={exchange.amount}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        // if (!/[\d?\.?]/.test(e.target.value.slice(-1))) return;
-                        // setSum(e.target.value);
                         setExchange(
                           produce((draft) => {
                             draft.amount = e.target.value;
@@ -276,7 +237,6 @@ export function CurrencyPage() {
         <Paper
           elevation={7}
           sx={{
-            // minWidth: 500,
             width: 703,
             padding: 5,
             borderRadius: 9,

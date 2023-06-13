@@ -12,15 +12,7 @@ export interface IBalance2 {
   year: number;
 }
 
-function getMonthNum(str: string) {
-  return Number(str.split('-')[1]) - 1;
-}
-
-export function useAccountData(
-  monthAmount: number,
-  refetch: number
-  // transAmount: number
-) {
+export function useAccountData(monthAmount: number, refetch: number) {
   const [accData, setAccData] = useState<IAccount>({
     account: '',
     balance: 0,
@@ -30,7 +22,6 @@ export function useAccountData(
   const [balanceArr, setBalanceArr] = useState<IBalance2[]>([]);
   const [lastTrans, setLastTrans] = useState<ITransaction[]>([]);
   const { account } = useParams();
-  // console.log(window.location.href.split('/').at(-1));
 
   const token = sessionStorage.getItem('auth');
 
@@ -66,26 +57,16 @@ export function useAccountData(
       year,
     });
   }
-  // balanceArrTemp.reverse();
 
   console.log(balanceArrTemp);
-  // setBalanceArr(balanceArr2);
 
   useEffect(() => {
-    // fetch(process.env.REACT_APP_API_SERVER + '/account/' + account, {
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json;charset=utf-8',
-    //     Authorization: `Basic ${token}`,
-    //   },
-    // }).then((res) => res.json());
     getAccountData(account || '').then(
       ({
         payload: { account, balance, mine, transactions },
       }: {
         payload: IAccount;
       }) => {
-        // console.log(account, balance, mine, transactions);
         setAccData({ account, balance, mine, transactions });
         setLastTrans(transactions.slice().reverse());
 
@@ -162,7 +143,6 @@ export function useAccountData(
             )
             .reduce((sum, current) => sum + current.amount, 0);
 
-          // console.log(monthTransInc);
           item.inc = monthTransInc;
           balance -= monthTransInc;
           const monthTransDec = transactions
@@ -174,13 +154,10 @@ export function useAccountData(
             )
             .reduce((sum, current) => sum + current.amount, 0);
 
-          // console.log(monthTransDec);
           item.dec = monthTransDec;
           balance += monthTransDec;
         });
 
-        // const balanceArrTempCopy = structuredClone(balanceArrTemp).reverse();
-        // setBalanceArr(balanceArrTempCopy);
         setBalanceArr(balanceArrTemp.slice().reverse());
       }
     );

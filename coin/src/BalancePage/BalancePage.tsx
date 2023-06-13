@@ -7,10 +7,8 @@ import TablePagination from '@mui/material/TablePagination';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { IBalance2, useAccountData } from '../hooks/useAccountData';
 import { IAccount, ITransaction } from '../HomePage';
-import { IBalance } from '../AccountPage';
 import { BalanceChart1 } from '../BalanceChart1';
 import { BalanceChart2 } from '../BalanceChart2';
-import { ContactSupport } from '@mui/icons-material';
 import { BalanceTable } from '../BalanceTable';
 
 export function BalancePage() {
@@ -56,7 +54,6 @@ export function BalancePage() {
           <Link to={'/account/' + account}>
             <Button
               variant="contained"
-              // onClick={createAccount}
               sx={{ p: '14px 24px 14px 18px', borderRadius: 2 }}
             >
               <KeyboardBackspaceIcon sx={{ mr: 1 }} />
@@ -73,13 +70,11 @@ export function BalancePage() {
         elevation={7}
         sx={{
           padding: '25px 50px',
-          // width: '720px',
-          // flexBasis: 720,
           borderRadius: 9,
           marginBottom: 5,
         }}
       >
-        <h2>Динамика баланса</h2>
+        <h2 className={styles.h2}>Динамика баланса</h2>
         <BalanceChart1 balanceArr={balanceArr} tickCount={3} />
       </Paper>
 
@@ -87,13 +82,11 @@ export function BalancePage() {
         elevation={7}
         sx={{
           padding: '25px 50px',
-          // width: '720px',
-          // flexBasis: 720,
           borderRadius: 9,
           marginBottom: 5,
         }}
       >
-        <h2>Соотношение входящих исходящих транзакций</h2>
+        <h2 className={styles.h2}>Соотношение входящих исходящих транзакций</h2>
         <BalanceChart2 balanceArr={balanceArr} />
       </Paper>
 
@@ -105,7 +98,7 @@ export function BalancePage() {
           backgroundColor: '#F3F4F6',
         }}
       >
-        <h2>История переводов</h2>
+        <h2 className={styles.h2}>История переводов</h2>
         <BalanceTable accData={accData} lastTrans={displayedTrans} />
         <TablePagination
           component="div"

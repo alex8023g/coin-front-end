@@ -93,8 +93,8 @@ export function Header2(props: Props) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Link className={styles.navBtn} to={item.href}>
-                <Button key={item.name} sx={{ color: '#fff' }} size="large">
+              <Link key={item.name} className={styles.navBtn} to={item.href}>
+                <Button sx={{ color: '#fff' }} size="large">
                   {item.name}
                 </Button>
               </Link>

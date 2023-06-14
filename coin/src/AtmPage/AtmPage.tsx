@@ -36,9 +36,9 @@ export function AtmPage() {
         >
           <TrafficControl />
           <TypeSelector />
-          <Placemark defaultGeometry={[55.75, 37.57]} />
-          {coordArr.map((item) => (
-            <Placemark defaultGeometry={item} />
+          {/* <Placemark defaultGeometry={[55.75, 37.57]} /> */}
+          {coordArr.map((item, i) => (
+            <Placemark key={item[0] + item[1]} defaultGeometry={item} />
           ))}
         </Map>
       </YMaps>

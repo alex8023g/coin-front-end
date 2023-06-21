@@ -17,8 +17,8 @@ import { Message } from '../Message';
 import { loginApi } from '../api/loginApi';
 
 export function LoginPage() {
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
+  const [login, setLogin] = useState('developer');
+  const [password, setPassword] = useState('skillbox');
   const [showPassword, setShowPassword] = useState(false);
   const [isMsgOpen, setIsMsgOpen] = useState(false);
   const [textMsg, setTextMsg] = useState('');
@@ -111,6 +111,7 @@ export function LoginPage() {
               id="login"
               label="Логин"
               variant="outlined"
+              value={login}
               onChange={handleLogin}
               sx={{ width: 300 }}
             />
@@ -128,6 +129,7 @@ export function LoginPage() {
               <OutlinedInput
                 error={isPassInvalid}
                 id="outlined-adornment-password"
+                value={password}
                 onChange={handlePassword}
                 type={showPassword ? 'text' : 'password'}
                 endAdornment={
